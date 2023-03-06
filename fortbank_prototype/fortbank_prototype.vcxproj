@@ -135,6 +135,10 @@
   <ItemGroup>
     <ClCompile Include="fortbank_prototype.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include=".h" />
+    <ClInclude Include="User.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
