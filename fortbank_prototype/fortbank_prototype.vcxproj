@@ -133,10 +133,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="admin_functions.cpp" />
     <ClCompile Include="fortbank_prototype.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include=".h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
