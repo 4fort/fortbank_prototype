@@ -52,7 +52,6 @@ public :
             res = mysql_store_result(conn);
             while (row = mysql_fetch_row(res)) {
                 Node* sll_user = new Node();
-
                 sll_user->setId(row[0]);
                 sll_user->setName(row[1]);
                 sll_user->setEmail(row[2]);

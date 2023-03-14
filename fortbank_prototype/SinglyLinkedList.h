@@ -12,9 +12,9 @@ class Node {
     string id;
     string owner_name;
     string email;
-    string balance;
     string card_num;
     string card_pin;
+    string balance;
 public:
     void setId(string x) {
         this->id = x;
@@ -34,12 +34,6 @@ public:
     string getEmail() {
         return this->email;
     }
-    void setBalance(string x) {
-        this->balance = x;
-    }
-    string getBalance() {
-        return this->balance;
-    }
     void setCardNum(string x) {
         this->card_num = x;
     }
@@ -52,6 +46,12 @@ public:
     string getCardPin() {
         return this->card_pin;
     }
+    void setBalance(string x) {
+        this->balance = x;
+    }
+    string getBalance() {
+        return this->balance;
+    }
 
     Node* next;
 
@@ -59,18 +59,18 @@ public:
         id = "";
         owner_name = "";
         email = "";
-        balance = "";
         card_num = "";
         card_pin = "";
+        balance = "";
         next = NULL;
     }
-    Node(string temp_id, string temp_owner_name, string temp_email, string temp_balance, string temp_card_num, string temp_card_pin) {
+    Node(string temp_id, string temp_owner_name, string temp_email, string temp_card_num, string temp_card_pin, string temp_balance) {
         id = temp_id;
         owner_name = temp_owner_name;
         email = temp_email;
-        balance = temp_balance;
         card_num = temp_card_num;
         card_pin = temp_card_pin;
+        balance = temp_balance;
     }
 };
 
@@ -187,11 +187,14 @@ public:
 
     }
     // 6th update node
-    void updateNodeByKey(string temp_id, string temp_owner_name, string temp_email, string temp_balance, string temp_card_num, string temp_card_pin) {
+    void updateNodeByKey(string temp_id, string temp_owner_name, string temp_email, string temp_card_pin, string temp_balance) {
 
         Node* ptr = nodeExists(temp_id);
         if (ptr != NULL) {
-            ptr->getName() = temp_owner_name;
+            ptr->setName(temp_owner_name);
+            ptr->setEmail(temp_email);
+            ptr->setCardPin(temp_card_pin);
+            ptr->setBalance(temp_balance);
             cout << "Node Data Updated Successfully" << endl;
         }
         else {
@@ -225,7 +228,6 @@ public:
                 printElement(temp->getCardPin(), 20, ' ');
                 cout << "P ";
                 printElement(temp->getBalance(), 0, ' ');
-                cout << '\n';
                 cout << '\n';
                 temp = temp->next;
             }

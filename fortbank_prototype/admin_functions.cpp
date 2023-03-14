@@ -3,11 +3,13 @@
 #include <time.h>
 #include <sstream>
 #include <iomanip>
-#include "User.h"
 #include "SQL_CONNECTOR.h"
+#include "SinglyLinkedList.h"
+
 using namespace std;
 
 SQL_CONNECTOR db_connect;
+SinglyLinkedList ssl;
 
 extern int main();
 void USER_ADD();
@@ -63,10 +65,11 @@ int ADMIN_MAIN() {
 }
 
 void USER_ADD() {
-    User user;
+    Node* ssl_user = new Node();
     string temp_input;
 
-    db_connect.connect();
+    //db_connect.connect();
+    ssl.printList();
 
     cout << "Enter Name: ";
     cin.ignore();
@@ -74,14 +77,14 @@ void USER_ADD() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    user.setName(temp_input);
+    ssl_user->setName(temp_input);
 
     cout << "Enter Email: ";
     getline(cin, temp_input);
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    user.setEmail(temp_input);
+    ssl_user->setEmail(temp_input);
 
     cout << "Enter Balance: ";
     cin >> temp_input;
@@ -89,20 +92,22 @@ void USER_ADD() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    user.setBalance(temp_input);
+    ssl_user->setBalance(temp_input);
 
-    user.setCardNum(cardNumGenerator());
-    user.setCardPin("1234");
-    
-    db_connect.Insert(user.getName(), user.getEmail(), user.getCardNum(), user.getCardPin(), user.getBalance());
+    ssl_user->setCardNum(cardNumGenerator());
+    ssl_user->setCardPin("1234");
+
+    ssl.appendNode(ssl_user);
+    //db_connect.Insert(user.getName(), user.getEmail(), user.getCardNum(), user.getCardPin(), user.getBalance());
 }
 
 void USER_UPDATE() {
-    User user;
+    Node* ssl_user = new Node();
     string temp_input;
     string temp_id;
 
-    db_connect.connect();
+    //db_connect.connect();
+    ssl.printList();
 
     cout << "Select ID\nadmin/# ";
     cin.ignore();
@@ -128,34 +133,36 @@ void USER_UPDATE() {
     else if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    user.setName(temp_input);
+    ssl_user->setName(temp_input);
 
     cout << "Enter Updated Email: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
         temp_input = db_connect.selectSpecific(temp_id, 2);
     }
-    user.setEmail(temp_input);
+    ssl_user->setEmail(temp_input);
 
     cout << "Enter Updated Balance: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
         temp_input = db_connect.selectSpecific(temp_id, 3);
     }
-    user.setBalance(temp_input);
+    ssl_user->setBalance(temp_input);
 
     cout << "Enter New Pin: ";
     cin >> temp_input;
     if (temp_input.empty()) {
         temp_input = db_connect.selectSpecific(temp_id, 4);
     }
-    user.setCardPin(temp_input);
+    ssl_user->setCardPin(temp_input);
 
-    db_connect.Update(temp_id, user.getName(), user.getEmail(), user.getCardPin(), user.getBalance());
+    ssl.updateNodeByKey(temp_id, ssl_user->getName(), ssl_user->getEmail(), ssl_user->getCardPin(), ssl_user->getBalance());
+    //db_connect.Update(temp_id, user.getName(), user.getEmail(), user.getCardPin(), user.getBalance());
 }
 
 void USER_DELETE() {
-    db_connect.connect();
+    //db_connect.connect();
+    ssl.printList();
 
     string temp_input;
     cout << "Enter ID: ";
@@ -165,7 +172,8 @@ void USER_DELETE() {
         RETURNTO_MENU();
     }
 
-    db_connect.Delete(temp_input);
+    ssl.deleteNodeByKey(temp_input);
+    //db_connect.Delete(temp_input);
 }
 
 void RETURNTO_MENU() {
