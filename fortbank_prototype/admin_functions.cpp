@@ -1,103 +1,72 @@
 #include <iostream>
 #include <mysql.h>
+#include <time.h>
 #include <sstream>
 #include <iomanip>
 #include "User.h"
+#include "SQL_CONNECTOR.h"
 using namespace std;
 
-int qstate;
-
-MYSQL* conn;
-MYSQL_ROW row;
-MYSQL_RES* res;
-
-const char* host = "localhost";
-const char* user = "root";
-const char* passwd = "password123@";
-const char* db = "fortbank";
-const int port = 3306;
-
-template<typename T> void printElement(T t, const int& width, char fill)
-{
-    cout << left << setw(width) << setfill(fill) << t;
-}
+SQL_CONNECTOR db_connect;
 
 extern int main();
-void SQL_CONNECT(string temp_id);
-string USER_GET(string temp_id, int inp);
-void QUERY_CMD(string query);
 void USER_ADD();
 void USER_UPDATE();
 void USER_DELETE();
 void RETURNTO_MENU();
 
-void SQL_CONNECT(string temp_id) {
-    conn = mysql_init(0);
-    conn = mysql_real_connect(conn, host, user, passwd, db, port, NULL, 0);
+string cardNumGenerator();
 
-    if (conn) {
-        //puts("Connected!\n");
+int ADMIN_MAIN() {
+    while (true) {
+        printElement("", 54, '#');
+        cout << " \x1b[1mADMIN PANEL\x1b[0m ";
+        printElement("", 53, '#');
+        cout << '\n';
+        db_connect.connect();
+        cout << "\n";
+        string crud[] = { "EXIT", "ADD USER", "UPDATE USER", "DELETE USER", "SAVE CHANGES"};
+        int crudlength = sizeof(crud) / sizeof(crud[0]);
+        for (int i = 0; i < crudlength; i++) {
+            cout << "[" << i << "] " << crud[i] << '\n';
+        }
 
-        string query;
-        if (temp_id != "") {
-            query = "SELECT * FROM Users WHERE id = " + temp_id;
+        int choice;
+        cout << "admin/# ";
+        cin >> choice;
+        system("cls");
+        switch (choice) {
+        case 0:
+            system("cls");
+            cout << "Thanks for using fortbank!";
+            exit(0);
+            break;
+        case 1:
+            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
+            USER_ADD();
+            break;
+        case 2:
+            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
+            USER_UPDATE();
+            break;
+        case 3:
+            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
+            USER_DELETE();
+            break;
+        default:
+            ADMIN_MAIN();
+            break;
         }
-        else {
-            query = "SELECT * FROM Users";
-        }
-        const char* q = query.c_str();
-        qstate = mysql_query(conn, q);
-        if (!qstate) {
-            res = mysql_store_result(conn);
-            printElement("", 120, '=');
-            cout << '\n';
-            printElement("ID", 5, ' ');
-            printElement("Name", 30, ' ');
-            printElement("Email", 50, ' ');
-            printElement("Balance", 0, ' ');
-            cout << '\n';
-            while (row = mysql_fetch_row(res)) {
-                printElement(row[0], 5, ' ');
-                printElement(row[1], 30, ' ');
-                printElement(row[2], 50, ' ');
-                cout << "P ";
-                printElement(row[3], 0, ' ');
-                cout << '\n';
-            }
-            printElement("", 120, '=');
-            cout << '\n';
-        }
-        else {
-            cout << "Query Failed: " << mysql_error(conn) << endl;
-        }
+        system("cls");
     }
-    else {
-        puts("Connection to database failed!");
-    }
-}
-
-string USER_GET(string temp_id, int inp) {
-    string query = "SELECT * FROM Users WHERE id = " + temp_id;
-    const char* q = query.c_str();
-    qstate = mysql_query(conn, q);
-    if (!qstate) {
-        res = mysql_store_result(conn);
-        row = mysql_fetch_row(res);
-
-        return row[inp];
-    }
-}
-
-void QUERY_CMD(string query) {
-    const char* q = query.c_str();
-    qstate = mysql_query(conn, q);
+    return 0;
 }
 
 void USER_ADD() {
     User user;
     string temp_input;
 
-    SQL_CONNECT("");
+    db_connect.connect();
 
     cout << "Enter Name: ";
     cin.ignore();
@@ -122,8 +91,10 @@ void USER_ADD() {
     }
     user.setBalance(temp_input);
 
-    string query = "INSERT INTO Users (owner_name, email, balance) VALUES ('" + user.getName() + "', '" + user.getEmail() + "' , " + user.getBalance() + ')';
-    QUERY_CMD(query);
+    user.setCardNum(cardNumGenerator());
+    user.setCardPin("1234");
+    
+    db_connect.Insert(user.getName(), user.getEmail(), user.getCardNum(), user.getCardPin(), user.getBalance());
 }
 
 void USER_UPDATE() {
@@ -131,7 +102,7 @@ void USER_UPDATE() {
     string temp_input;
     string temp_id;
 
-    SQL_CONNECT("");
+    db_connect.connect();
 
     cout << "Select ID\nadmin/# ";
     cin.ignore();
@@ -146,12 +117,13 @@ void USER_UPDATE() {
 
     system("cls");
     cout << "TIP: You can press \x1b[1mRETURN\x1b[0m [ <-| ] to skip or use default value.\n";
-    SQL_CONNECT(temp_id);
+    db_connect.print(temp_id);
+
 
     cout << "Enter Updated Name: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = USER_GET(temp_id, 1);
+        temp_input = db_connect.selectSpecific(temp_id, 1);
     }
     else if (temp_input == "!r") {
         RETURNTO_MENU();
@@ -161,23 +133,29 @@ void USER_UPDATE() {
     cout << "Enter Updated Email: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = USER_GET(temp_id, 2);
+        temp_input = db_connect.selectSpecific(temp_id, 2);
     }
     user.setEmail(temp_input);
 
     cout << "Enter Updated Balance: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = USER_GET(temp_id, 3);
+        temp_input = db_connect.selectSpecific(temp_id, 3);
     }
     user.setBalance(temp_input);
 
-    string query = "UPDATE Users SET owner_name = '" + user.getName() + "', email = '" + user.getEmail() + "', balance = " + user.getBalance() + " WHERE id = " + temp_id;
-    QUERY_CMD(query);
+    cout << "Enter New Pin: ";
+    cin >> temp_input;
+    if (temp_input.empty()) {
+        temp_input = db_connect.selectSpecific(temp_id, 4);
+    }
+    user.setCardPin(temp_input);
+
+    db_connect.Update(temp_id, user.getName(), user.getEmail(), user.getCardPin(), user.getBalance());
 }
 
 void USER_DELETE() {
-    SQL_CONNECT("");
+    db_connect.connect();
 
     string temp_input;
     cout << "Enter ID: ";
@@ -187,11 +165,21 @@ void USER_DELETE() {
         RETURNTO_MENU();
     }
 
-    string query = "DELETE FROM Users WHERE id = " + temp_input;
-    QUERY_CMD(query);
+    db_connect.Delete(temp_input);
 }
 
 void RETURNTO_MENU() {
     system("cls");
-    main();
+    ADMIN_MAIN();
+}
+
+string cardNumGenerator() {
+    srand(time(0));
+    char randomizer;
+    string random_card = "456";
+    for (int i = 0; i < 3; i++) {
+        randomizer = rand() % (57 - 49 + 1) + 49;
+        random_card = random_card + randomizer;
+    }
+    return random_card;
 }

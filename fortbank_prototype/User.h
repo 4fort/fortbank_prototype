@@ -2,16 +2,14 @@
 #include <iostream>
 using namespace std;
 class User {
+    string id;
     string name;
     string email;
     string balance;
+    string card_num;
+    string card_pin;
 
 public:
-    static void test() {
-        static int num = 0;
-        num++;
-        cout << num;
-    }
     void setName(string x) {
         this->name = x;
     }
@@ -29,5 +27,17 @@ public:
     }
     string getBalance() {
         return this->balance;
+    }
+    void setCardNum(string x) {
+        this->card_num = x;
+    }
+    string getCardNum() {
+        return this->card_num;
+    }
+    void setCardPin(string x) {
+        this->card_pin = x;
+    }
+    string getCardPin() {
+        return this->card_pin;
     }
 };
