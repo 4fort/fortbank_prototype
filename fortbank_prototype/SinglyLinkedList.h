@@ -4,13 +4,49 @@
 using namespace std;
 
 class Node {
-public:
     string id;
     string owner_name;
     string email;
     string balance;
     string card_num;
     string card_pin;
+public:
+    void setId(string x) {
+        this->id = x;
+    }
+    string getId() {
+        return this->id;
+    }
+    void setName(string x) {
+        this->owner_name = x;
+    }
+    string getName() {
+        return this->owner_name;
+    }
+    void setEmail(string x) {
+        this->email = x;
+    }
+    string getEmail() {
+        return this->email;
+    }
+    void setBalance(string x) {
+        this->balance = x;
+    }
+    string getBalance() {
+        return this->balance;
+    }
+    void setCardNum(string x) {
+        this->card_num = x;
+    }
+    string getCardNum() {
+        return this->card_num;
+    }
+    void setCardPin(string x) {
+        this->card_pin = x;
+    }
+    string getCardPin() {
+        return this->card_pin;
+    }
 
     Node* next;
 
@@ -50,7 +86,7 @@ public:
 
         Node* ptr = head;
         while (ptr != NULL) {
-            if (ptr->id == temp_id) {
+            if (ptr->getId() == temp_id) {
                 temp = ptr;
             }
             ptr = ptr->next;
@@ -61,8 +97,8 @@ public:
 
     // 2. Append a node to the list
     void appendNode(Node* n) {
-        if (nodeExists(n->id) != NULL) {
-            cout << "Node Already exists with key value : " << n->id << ". Append another node with different Key value" << endl;
+        if (nodeExists(n->getId()) != NULL) {
+            cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
         }
         else {
             if (head == NULL) {
@@ -82,8 +118,8 @@ public:
     }
     // 3. Prepend Node - Attach a node at the start
     void prependNode(Node* n) {
-        if (nodeExists(n->id) != NULL) {
-            cout << "Node Already exists with key value : " << n->id << ". Append another node with different Key value" << endl;
+        if (nodeExists(n->getId()) != NULL) {
+            cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
         }
         else {
             n->next = head;
@@ -99,8 +135,8 @@ public:
             cout << "No node exists with key value: " << temp_id << endl;
         }
         else {
-            if (nodeExists(n->id) != NULL) {
-                cout << "Node Already exists with key value : " << n->id << ". Append another node with different Key value" << endl;
+            if (nodeExists(n->getId()) != NULL) {
+                cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
             }
             else {
                 n->next = ptr->next;
@@ -116,7 +152,7 @@ public:
             cout << "Singly Linked List already Empty. Cant delete" << endl;
         }
         else if (head != NULL) {
-            if (head->id == temp_id) {
+            if (head->getId() == temp_id) {
                 head = head->next;
                 cout << "Node UNLINKED with keys value : " << temp_id << endl;
             }
@@ -125,7 +161,7 @@ public:
                 Node* prevptr = head;
                 Node* currentptr = head->next;
                 while (currentptr != NULL) {
-                    if (currentptr->id == temp_id) {
+                    if (currentptr->getId() == temp_id) {
                         temp = currentptr;
                         currentptr = NULL;
                     }
@@ -150,7 +186,7 @@ public:
 
         Node* ptr = nodeExists(temp_id);
         if (ptr != NULL) {
-            ptr->owner_name = temp_owner_name;
+            ptr->getName() = temp_owner_name;
             cout << "Node Data Updated Successfully" << endl;
         }
         else {
@@ -169,7 +205,7 @@ public:
             Node* temp = head;
 
             while (temp != NULL) {
-                cout << "(" << temp->id << "," << temp->owner_name << ") --> ";
+                cout << "(" << temp->getId() << "\t" << temp->getName() << "\t" << temp->getEmail() << "\t" << temp->getBalance() << "\t" << temp->getCardNum() << "\t" << temp->getCardPin() << ") --> ";
                 temp = temp->next;
             }
         }
@@ -208,12 +244,12 @@ int main() {
             cin >> temp_balance;
             cin >> temp_card_num;
             cin >> temp_card_pin;
-            n1->id = temp_id;
-            n1->owner_name = temp_owner_name;
-            n1->email = temp_email;
-            n1->balance = temp_balance;
-            n1->card_num = temp_card_num;
-            n1->card_pin = temp_card_pin;
+            n1->setId(temp_id);
+            n1->setName(temp_owner_name);
+            n1->setEmail(temp_email);
+            n1->setBalance(temp_balance);
+            n1->setCardNum(temp_card_num);
+            n1->setCardPin(temp_card_pin);
             s.appendNode(n1);
             //cout<<n1.key<<" = "<<n1.data<<endl;
             break;
@@ -226,12 +262,12 @@ int main() {
             cin >> temp_balance;
             cin >> temp_card_num;
             cin >> temp_card_pin;
-            n1->id = temp_id;
-            n1->owner_name = temp_owner_name;
-            n1->email = temp_email;
-            n1->balance = temp_balance;
-            n1->card_num = temp_card_num;
-            n1->card_pin = temp_card_pin;
+            n1->setId(temp_id);
+            n1->setName(temp_owner_name);
+            n1->setEmail(temp_email);
+            n1->setBalance(temp_balance);
+            n1->setCardNum(temp_card_num);
+            n1->setCardPin(temp_card_pin);
             s.prependNode(n1);
             break;
 
@@ -245,12 +281,12 @@ int main() {
             cin >> temp_balance;
             cin >> temp_card_num;
             cin >> temp_card_pin;
-            n1->id = temp_id;
-            n1->owner_name = temp_owner_name;
-            n1->email = temp_email;
-            n1->balance = temp_balance;
-            n1->card_num = temp_card_num;
-            n1->card_pin = temp_card_pin;
+            n1->setId(temp_id);
+            n1->setName(temp_owner_name);
+            n1->setEmail(temp_email);
+            n1->setBalance(temp_balance);
+            n1->setCardNum(temp_card_num);
+            n1->setCardPin(temp_card_pin);
 
             s.insertNodeAfter(k1, n1);
             break;
@@ -270,12 +306,12 @@ int main() {
             cin >> temp_balance;
             cin >> temp_card_num;
             cin >> temp_card_pin;
-            n1->id = temp_id;
-            n1->owner_name = temp_owner_name;
-            n1->email = temp_email;
-            n1->balance = temp_balance;
-            n1->card_num = temp_card_num;
-            n1->card_pin = temp_card_pin;
+            n1->setId(temp_id);
+            n1->setName(temp_owner_name);
+            n1->setEmail(temp_email);
+            n1->setBalance(temp_balance);
+            n1->setCardNum(temp_card_num);
+            n1->setCardPin(temp_card_pin);
             s.updateNodeByKey(temp_id, temp_owner_name, temp_email, temp_balance, temp_card_num, temp_card_pin);
 
             break;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <mysql.h>
 #include <sstream>
+#include "SinglyLinkedList.h"
 using namespace std;
 
 template<typename T> void printElement(T t, const int& width, char fill)
@@ -11,6 +12,9 @@ template<typename T> void printElement(T t, const int& width, char fill)
 
 class SQL_CONNECTOR {
     int qstate;
+
+    SinglyLinkedList sll;
+    Node* sll_user = new Node();
 
     MYSQL* conn;
     MYSQL_ROW row;
@@ -47,27 +51,12 @@ public :
         query(q);
         if (!qstate) {
             res = mysql_store_result(conn);
-            printElement("", 120, '=');
-            cout << '\n';
-            printElement("ID", 5, ' ');
-            printElement("Name", 20, ' ');
-            printElement("Email", 30, ' ');
-            printElement("Card Num", 20, ' ');
-            printElement("Card Pin", 20, ' ');
-            printElement("Balance", 20, ' ');
-            cout << '\n';
-            while (row = mysql_fetch_row(res)) {
-                printElement(row[0], 5, ' ');
-                printElement(row[1], 20, ' ');
-                printElement(row[2], 30, ' ');
-                printElement(row[3], 20, ' ');
-                printElement(row[4], 20, ' ');
-                cout << "P ";
-                printElement(row[5], 0, ' ');
-                cout << '\n';
-            }
-            printElement("", 120, '=');
-            cout << '\n';
+            sll_user->setId(row[0]);
+            sll_user->setName(row[1]);
+            sll_user->setEmail(row[2]);
+            sll_user->setCardNum(row[3]);
+            sll_user->setCardPin(row[4]);
+            sll_user->setBalance(row[5]);
         }
         else {
             cout << "Query Failed: " << mysql_error(conn) << endl;
