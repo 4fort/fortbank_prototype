@@ -14,7 +14,6 @@ class SQL_CONNECTOR {
     int qstate;
 
     SinglyLinkedList sll;
-    Node* sll_user = new Node();
 
     MYSQL* conn;
     MYSQL_ROW row;
@@ -51,13 +50,18 @@ public :
         query(q);
         if (!qstate) {
             res = mysql_store_result(conn);
-            sll_user->setId(row[0]);
-            sll_user->setName(row[1]);
-            sll_user->setEmail(row[2]);
-            sll_user->setCardNum(row[3]);
-            sll_user->setCardPin(row[4]);
-            sll_user->setBalance(row[5]);
-            sll.appendNode(sll_user);
+            while (row = mysql_fetch_row(res)) {
+                Node* sll_user = new Node();
+
+                sll_user->setId(row[0]);
+                sll_user->setName(row[1]);
+                sll_user->setEmail(row[2]);
+                sll_user->setCardNum(row[3]);
+                sll_user->setCardPin(row[4]);
+                sll_user->setBalance(row[5]);
+                sll.appendNode(sll_user);
+            }
+            sll.printList();
         }
         else {
             cout << "Query Failed: " << mysql_error(conn) << endl;
