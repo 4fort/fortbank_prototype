@@ -5,10 +5,10 @@
 #include "SinglyLinkedList.h"
 using namespace std;
 
-template<typename T> void printElement(T t, const int& width, char fill)
-{
-    cout << left << setw(width) << setfill(fill) << t;
-}
+//template<typename T> void printElement(T t, const int& width, char fill)
+//{
+//    cout << left << setw(width) << setfill(fill) << t;
+//}
 
 class SQL_CONNECTOR {
     int qstate;
@@ -57,6 +57,7 @@ public :
             sll_user->setCardNum(row[3]);
             sll_user->setCardPin(row[4]);
             sll_user->setBalance(row[5]);
+            sll.appendNode(sll_user);
         }
         else {
             cout << "Query Failed: " << mysql_error(conn) << endl;

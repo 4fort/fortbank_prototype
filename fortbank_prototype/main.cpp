@@ -3,11 +3,6 @@
 
 using namespace std;
 
-template<typename T> void printElement(T t, const int& width, char fill)
-{
-    cout << left << setw(width) << setfill(fill) << t;
-}
-
 extern int ADMIN_MAIN();
 
 int main()
