@@ -9,11 +9,13 @@ using namespace std;
 //{
 //    cout << left << setw(width) << setfill(fill) << t;
 //}
+SinglyLinkedList sll;
+
 
 class SQL_CONNECTOR {
     int qstate;
 
-    SinglyLinkedList sll;
+    
 
     MYSQL* conn;
     MYSQL_ROW row;
@@ -31,7 +33,7 @@ public :
 
         if (conn) {
             //puts("Connected!\n");
-            print("");
+            createList("");
         }
         else {
             puts("Connection to database failed!");
@@ -41,7 +43,7 @@ public :
         const char* q = query.c_str();
         qstate = mysql_query(conn, q);
     }
-    void print(string id) {
+    void createList(string id) {
         string q;
         if (id != "") {
             q = "SELECT * FROM Users WHERE id = " + id;

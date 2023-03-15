@@ -9,7 +9,7 @@
 using namespace std;
 
 SQL_CONNECTOR db_connect;
-SinglyLinkedList ssl;
+extern SinglyLinkedList sll;
 
 extern int main();
 void USER_ADD();
@@ -26,6 +26,7 @@ int ADMIN_MAIN() {
         printElement("", 53, '#');
         cout << '\n';
         db_connect.connect();
+        sll.printList();
         cout << "\n";
         string crud[] = { "EXIT", "ADD USER", "UPDATE USER", "DELETE USER", "SAVE CHANGES"};
         int crudlength = sizeof(crud) / sizeof(crud[0]);
@@ -69,7 +70,8 @@ void USER_ADD() {
     string temp_input;
 
     //db_connect.connect();
-    ssl.printList();
+    sll.printList();
+    //db_connect.print("");
 
     cout << "Enter Name: ";
     cin.ignore();
@@ -97,7 +99,7 @@ void USER_ADD() {
     ssl_user->setCardNum(cardNumGenerator());
     ssl_user->setCardPin("1234");
 
-    ssl.appendNode(ssl_user);
+    sll.appendNode(ssl_user);
     //db_connect.Insert(user.getName(), user.getEmail(), user.getCardNum(), user.getCardPin(), user.getBalance());
 }
 
@@ -107,7 +109,7 @@ void USER_UPDATE() {
     string temp_id;
 
     //db_connect.connect();
-    ssl.printList();
+    sll.printList();
 
     cout << "Select ID\nadmin/# ";
     cin.ignore();
@@ -122,7 +124,7 @@ void USER_UPDATE() {
 
     system("cls");
     cout << "TIP: You can press \x1b[1mRETURN\x1b[0m [ <-| ] to skip or use default value.\n";
-    db_connect.print(temp_id);
+    //db_connect.print(temp_id);
 
 
     cout << "Enter Updated Name: ";
@@ -156,13 +158,13 @@ void USER_UPDATE() {
     }
     ssl_user->setCardPin(temp_input);
 
-    ssl.updateNodeByKey(temp_id, ssl_user->getName(), ssl_user->getEmail(), ssl_user->getCardPin(), ssl_user->getBalance());
+    sll.updateNodeByKey(temp_id, ssl_user->getName(), ssl_user->getEmail(), ssl_user->getCardPin(), ssl_user->getBalance());
     //db_connect.Update(temp_id, user.getName(), user.getEmail(), user.getCardPin(), user.getBalance());
 }
 
 void USER_DELETE() {
     //db_connect.connect();
-    ssl.printList();
+    sll.printList();
 
     string temp_input;
     cout << "Enter ID: ";
@@ -172,7 +174,7 @@ void USER_DELETE() {
         RETURNTO_MENU();
     }
 
-    ssl.deleteNodeByKey(temp_input);
+    sll.deleteNodeByKey(temp_input);
     //db_connect.Delete(temp_input);
 }
 
