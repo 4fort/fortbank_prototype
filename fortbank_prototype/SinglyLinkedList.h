@@ -1,12 +1,8 @@
 #pragma once
-#include<iostream>
-
+#include <iostream>
+#include "custlib.h"
 using namespace std;
-
-template<typename T> void printElement(T t, const int& width, char fill)
-{
-    cout << left << setw(width) << setfill(fill) << t;
-}
+extern custlib cstmlib;
 
 class Node {
     string id;
@@ -108,7 +104,7 @@ public:
         else {
             if (head == NULL) {
                 head = n;
-                cout << "Node Appended" << endl;
+                //cout << "Node Appended" << endl;
             }
             else {
                 Node* ptr = head;
@@ -119,13 +115,13 @@ public:
                 if (n->getId() == "") {
                     n->setId(to_string(stoi(ptr->getId()) + 1));
                 }
-                cout << "Node Appended" << endl;
+                //cout << "Node Appended" << endl;
             }
         }
 
     }
     // 3. Prepend Node - Attach a node at the start
-    void prependNode(Node* n) {
+    /*void prependNode(Node* n) {
         if (nodeExists(n->getId()) != NULL) {
             cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
         }
@@ -134,10 +130,10 @@ public:
             head = n;
             cout << "Node Prepended" << endl;
         }
-    }
+    }*/
 
     // 4. Insert a Node after a particular node in the list
-    void insertNodeAfter(string temp_id, Node* n) {
+    /*void insertNodeAfter(string temp_id, Node* n) {
         Node* ptr = nodeExists(temp_id);
         if (ptr == NULL) {
             cout << "No node exists with key value: " << temp_id << endl;
@@ -152,7 +148,7 @@ public:
                 cout << "Node Inserted" << endl;
             }
         }
-    }
+    }*/
 
     // 5. Delete node by unique key
     void deleteNodeByKey(string temp_id) {
@@ -212,29 +208,29 @@ public:
             cout << "No Nodes in Singly Linked List";
         }
         else {
-            printElement("", 120, '=');
+            cstmlib.printElement("", 120, '=');
             cout << '\n';
-            printElement("ID", 5, ' ');
-            printElement("Name", 20, ' ');
-            printElement("Email", 30, ' ');
-            printElement("Card Num", 20, ' ');
-            printElement("Card Pin", 20, ' ');
-            printElement("Balance", 20, ' ');
+            cstmlib.printElement("ID", 5, ' ');
+            cstmlib.printElement("Name", 20, ' ');
+            cstmlib.printElement("Email", 30, ' ');
+            cstmlib.printElement("Card Num", 20, ' ');
+            cstmlib.printElement("Card Pin", 20, ' ');
+            cstmlib.printElement("Balance", 20, ' ');
             cout << '\n';
             Node* temp = head;
 
             while (temp != NULL) {
-                printElement(temp->getId(), 5, ' ');
-                printElement(temp->getName(), 20, ' ');
-                printElement(temp->getEmail(), 30, ' ');
-                printElement(temp->getCardNum(), 20, ' ');
-                printElement(temp->getCardPin(), 20, ' ');
+                cstmlib.printElement(temp->getId(), 5, ' ');
+                cstmlib.printElement(temp->getName(), 20, ' ');
+                cstmlib.printElement(temp->getEmail(), 30, ' ');
+                cstmlib.printElement(temp->getCardNum(), 20, ' ');
+                cstmlib.printElement(temp->getCardPin(), 20, ' ');
                 cout << "P ";
-                printElement(temp->getBalance(), 0, ' ');
+                cstmlib.printElement(temp->getBalance(), 0, ' ');
                 cout << '\n';
                 temp = temp->next;
             }
-            printElement("", 120, '=');
+            cstmlib.printElement("", 120, '=');
         }
 
     }
@@ -262,24 +258,24 @@ public:
         else {
             Node* ptr = nodeExists(temp_id);
             if (ptr != NULL) {
-                printElement("", 120, '=');
+                cstmlib.printElement("", 120, '=');
                 cout << '\n';
-                printElement("ID", 5, ' ');
-                printElement("Name", 20, ' ');
-                printElement("Email", 30, ' ');
-                printElement("Card Num", 20, ' ');
-                printElement("Card Pin", 20, ' ');
-                printElement("Balance", 20, ' ');
+                cstmlib.printElement("ID", 5, ' ');
+                cstmlib.printElement("Name", 20, ' ');
+                cstmlib.printElement("Email", 30, ' ');
+                cstmlib.printElement("Card Num", 20, ' ');
+                cstmlib.printElement("Card Pin", 20, ' ');
+                cstmlib.printElement("Balance", 20, ' ');
                 cout << '\n';
-                printElement(ptr->getId(), 5, ' ');
-                printElement(ptr->getName(), 20, ' ');
-                printElement(ptr->getEmail(), 30, ' ');
-                printElement(ptr->getCardNum(), 20, ' ');
-                printElement(ptr->getCardPin(), 20, ' ');
+                cstmlib.printElement(ptr->getId(), 5, ' ');
+                cstmlib.printElement(ptr->getName(), 20, ' ');
+                cstmlib.printElement(ptr->getEmail(), 30, ' ');
+                cstmlib.printElement(ptr->getCardNum(), 20, ' ');
+                cstmlib.printElement(ptr->getCardPin(), 20, ' ');
                 cout << "P ";
-                printElement(ptr->getBalance(), 0, ' ');
+                cstmlib.printElement(ptr->getBalance(), 0, ' ');
                 cout << '\n';
-                printElement("", 120, '=');
+                cstmlib.printElement("", 120, '=');
             }
         }
     }

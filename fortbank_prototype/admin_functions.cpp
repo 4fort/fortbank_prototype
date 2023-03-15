@@ -1,15 +1,14 @@
 #include <iostream>
 #include <mysql.h>
-#include <time.h>
-#include <sstream>
-#include <iomanip>
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
+#include "custlib.h"
 
 using namespace std;
 
 SQL_CONNECTOR db_connect;
-extern SinglyLinkedList sll;
+SinglyLinkedList sll;
+extern custlib cstmlib;
 
 extern int main();
 void USER_ADD();
@@ -21,14 +20,10 @@ string cardNumGenerator();
 
 int ADMIN_MAIN() {
     while (true) {
-        printElement("", 54, '#');
+        cstmlib.printElement("", 54, '#');
         cout << " \x1b[1mADMIN PANEL\x1b[0m ";
-        printElement("", 53, '#');
+        cstmlib.printElement("", 53, '#');
         cout << '\n';
-
-        if (sll.nodeExists("1") == NULL) {
-            db_connect.connect();
-        }
         sll.printList();
 
         cout << "\n";
@@ -45,15 +40,13 @@ int ADMIN_MAIN() {
         switch (choice) {
         case 0:
             system("cls");
-            cout << "Thanks for using fortbank!";
-            exit(0);
+            main();
             break;
         case 1:
             cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
             USER_ADD();
             break;
         case 2:
-            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
             USER_UPDATE();
             break;
         case 3:
@@ -111,14 +104,17 @@ void USER_UPDATE() {
     Node* sll_user = new Node();
     string temp_input;
     string temp_id;
-
+    system("cls");
+    cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
     //db_connect.connect();
     sll.printList();
 
     cout << "Select ID\nadmin/# ";
-    getline(cin, temp_id);
+    cin >> temp_id;
     if (temp_id == "") {
-        system("cls");
+        USER_UPDATE();
+    }
+    else if (sll.selectSpecific(temp_id) == NULL) {
         USER_UPDATE();
     }
     else if (temp_id == "!r") {
@@ -128,14 +124,10 @@ void USER_UPDATE() {
     system("cls");
     cout << "TIP: You can press \x1b[1mRETURN\x1b[0m [ <-| ] to skip or use default value.\n";
     //db_connect.print(temp_id);
-    if (sll.selectSpecific(temp_id) == NULL) {
-        USER_UPDATE();
-    }
-    else {
-        sll.printSpecific(temp_id);
-    }
+    sll.printSpecific(temp_id);
 
     cout << "Enter Updated Name: ";
+    cin.ignore();
     getline(cin, temp_input);
     if (temp_input.empty()) {
         //temp_input = db_connect.selectSpecific(temp_id, 1);

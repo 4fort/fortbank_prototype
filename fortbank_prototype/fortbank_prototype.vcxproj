@@ -134,9 +134,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="admin_functions.cpp" />
+    <ClCompile Include="client_functions.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="custlib.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="SQL_CONNECTOR.h" />
   </ItemGroup>

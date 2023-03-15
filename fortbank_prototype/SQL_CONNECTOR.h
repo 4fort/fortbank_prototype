@@ -3,13 +3,9 @@
 #include <mysql.h>
 #include <sstream>
 #include "SinglyLinkedList.h"
+#include "custlib.h"
 using namespace std;
-
-//template<typename T> void printElement(T t, const int& width, char fill)
-//{
-//    cout << left << setw(width) << setfill(fill) << t;
-//}
-SinglyLinkedList sll;
+extern SinglyLinkedList sll;
 
 
 class SQL_CONNECTOR {
