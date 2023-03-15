@@ -15,8 +15,6 @@ SinglyLinkedList sll;
 class SQL_CONNECTOR {
     int qstate;
 
-    
-
     MYSQL* conn;
     MYSQL_ROW row;
     MYSQL_RES* res;
@@ -62,21 +60,9 @@ public :
                 sll_user->setBalance(row[5]);
                 sll.appendNode(sll_user);
             }
-            sll.printList();
         }
         else {
             cout << "Query Failed: " << mysql_error(conn) << endl;
-        }
-    }
-    string selectSpecific(string id, int inp) {
-        string query = "SELECT * FROM Users WHERE id = " + id;
-        const char* q = query.c_str();
-        qstate = mysql_query(conn, q);
-        if (!qstate) {
-            res = mysql_store_result(conn);
-            row = mysql_fetch_row(res);
-
-            return row[inp];
         }
     }
 	void Insert(string name, string email, string card_num, string card_pin, string balance) {

@@ -25,10 +25,14 @@ int ADMIN_MAIN() {
         cout << " \x1b[1mADMIN PANEL\x1b[0m ";
         printElement("", 53, '#');
         cout << '\n';
-        db_connect.connect();
+
+        if (sll.nodeExists("1") == NULL) {
+            db_connect.connect();
+        }
         sll.printList();
+
         cout << "\n";
-        string crud[] = { "EXIT", "ADD USER", "UPDATE USER", "DELETE USER", "SAVE CHANGES"};
+        string crud[] = { "EXIT", "ADD USER", "UPDATE USER", "DELETE USER"};
         int crudlength = sizeof(crud) / sizeof(crud[0]);
         for (int i = 0; i < crudlength; i++) {
             cout << "[" << i << "] " << crud[i] << '\n';
@@ -66,7 +70,7 @@ int ADMIN_MAIN() {
 }
 
 void USER_ADD() {
-    Node* ssl_user = new Node();
+    Node* sll_user = new Node();
     string temp_input;
 
     //db_connect.connect();
@@ -79,14 +83,14 @@ void USER_ADD() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    ssl_user->setName(temp_input);
+    sll_user->setName(temp_input);
 
     cout << "Enter Email: ";
     getline(cin, temp_input);
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    ssl_user->setEmail(temp_input);
+    sll_user->setEmail(temp_input);
 
     cout << "Enter Balance: ";
     cin >> temp_input;
@@ -94,17 +98,17 @@ void USER_ADD() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    ssl_user->setBalance(temp_input);
+    sll_user->setBalance(temp_input);
 
-    ssl_user->setCardNum(cardNumGenerator());
-    ssl_user->setCardPin("1234");
+    sll_user->setCardNum(cardNumGenerator());
+    sll_user->setCardPin("1234");
 
-    sll.appendNode(ssl_user);
-    //db_connect.Insert(user.getName(), user.getEmail(), user.getCardNum(), user.getCardPin(), user.getBalance());
+    sll.appendNode(sll_user);
+    db_connect.Insert(sll_user->getName(), sll_user->getEmail(), sll_user->getCardNum(), sll_user->getCardPin(), sll_user->getBalance());
 }
 
 void USER_UPDATE() {
-    Node* ssl_user = new Node();
+    Node* sll_user = new Node();
     string temp_input;
     string temp_id;
 
@@ -112,7 +116,6 @@ void USER_UPDATE() {
     sll.printList();
 
     cout << "Select ID\nadmin/# ";
-    cin.ignore();
     getline(cin, temp_id);
     if (temp_id == "") {
         system("cls");
@@ -125,41 +128,50 @@ void USER_UPDATE() {
     system("cls");
     cout << "TIP: You can press \x1b[1mRETURN\x1b[0m [ <-| ] to skip or use default value.\n";
     //db_connect.print(temp_id);
-
+    if (sll.selectSpecific(temp_id) == NULL) {
+        USER_UPDATE();
+    }
+    else {
+        sll.printSpecific(temp_id);
+    }
 
     cout << "Enter Updated Name: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = db_connect.selectSpecific(temp_id, 1);
+        //temp_input = db_connect.selectSpecific(temp_id, 1);
+        temp_input = sll.selectSpecific(temp_id)->getName();
     }
     else if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    ssl_user->setName(temp_input);
+    sll_user->setName(temp_input);
 
     cout << "Enter Updated Email: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = db_connect.selectSpecific(temp_id, 2);
+        //temp_input = db_connect.selectSpecific(temp_id, 2);
+        temp_input = sll.selectSpecific(temp_id)->getEmail();
     }
-    ssl_user->setEmail(temp_input);
+    sll_user->setEmail(temp_input);
 
     cout << "Enter Updated Balance: ";
     getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = db_connect.selectSpecific(temp_id, 3);
+        //temp_input = db_connect.selectSpecific(temp_id, 3);
+        temp_input = sll.selectSpecific(temp_id)->getBalance();
     }
-    ssl_user->setBalance(temp_input);
+    sll_user->setBalance(temp_input);
 
     cout << "Enter New Pin: ";
-    cin >> temp_input;
+    getline(cin, temp_input);
     if (temp_input.empty()) {
-        temp_input = db_connect.selectSpecific(temp_id, 4);
+        //temp_input = db_connect.selectSpecific(temp_id, 4);
+        temp_input = sll.selectSpecific(temp_id)->getCardPin();
     }
-    ssl_user->setCardPin(temp_input);
+    sll_user->setCardPin(temp_input);
 
-    sll.updateNodeByKey(temp_id, ssl_user->getName(), ssl_user->getEmail(), ssl_user->getCardPin(), ssl_user->getBalance());
-    //db_connect.Update(temp_id, user.getName(), user.getEmail(), user.getCardPin(), user.getBalance());
+    sll.updateNodeByKey(temp_id, sll_user->getName(), sll_user->getEmail(), sll_user->getCardPin(), sll_user->getBalance());
+    db_connect.Update(temp_id, sll_user->getName(), sll_user->getEmail(), sll_user->getCardPin(), sll_user->getBalance());
 }
 
 void USER_DELETE() {
@@ -175,7 +187,7 @@ void USER_DELETE() {
     }
 
     sll.deleteNodeByKey(temp_input);
-    //db_connect.Delete(temp_input);
+    db_connect.Delete(temp_input);
 }
 
 void RETURNTO_MENU() {

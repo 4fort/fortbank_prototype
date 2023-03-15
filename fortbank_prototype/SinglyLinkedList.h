@@ -116,6 +116,9 @@ public:
                     ptr = ptr->next;
                 }
                 ptr->next = n;
+                if (n->getId() == "") {
+                    n->setId(to_string(stoi(ptr->getId()) + 1));
+                }
                 cout << "Node Appended" << endl;
             }
         }
@@ -236,121 +239,48 @@ public:
 
     }
 
+    // 8th printing specific
+    Node* selectSpecific(string temp_id) {
+        if (head == NULL) {
+            cout << "No Nodes in Singly Linked List";
+        }
+        else {
+            Node* ptr = nodeExists(temp_id);
+            if (ptr != NULL) {
+                return ptr;
+            }
+            else {
+                return NULL;
+            }
+        }
+    }
+
+    void printSpecific(string temp_id) {
+        if (head == NULL) {
+            cout << "No Nodes in Singly Linked List";
+        }
+        else {
+            Node* ptr = nodeExists(temp_id);
+            if (ptr != NULL) {
+                printElement("", 120, '=');
+                cout << '\n';
+                printElement("ID", 5, ' ');
+                printElement("Name", 20, ' ');
+                printElement("Email", 30, ' ');
+                printElement("Card Num", 20, ' ');
+                printElement("Card Pin", 20, ' ');
+                printElement("Balance", 20, ' ');
+                cout << '\n';
+                printElement(ptr->getId(), 5, ' ');
+                printElement(ptr->getName(), 20, ' ');
+                printElement(ptr->getEmail(), 30, ' ');
+                printElement(ptr->getCardNum(), 20, ' ');
+                printElement(ptr->getCardPin(), 20, ' ');
+                cout << "P ";
+                printElement(ptr->getBalance(), 0, ' ');
+                cout << '\n';
+                printElement("", 120, '=');
+            }
+        }
+    }
 };
-//
-//int main() {
-//
-//    SinglyLinkedList s;
-//    int option;
-//    string temp_id, k1, temp_owner_name, temp_email, temp_balance, temp_card_num, temp_card_pin;
-//    do {
-//        cout << "\nWhat operation do you want to perform? Select Option number. Enter 0 to exit." << endl;
-//        cout << "1. appendNode()" << endl;
-//        cout << "2. prependNode()" << endl;
-//        cout << "3. insertNodeAfter()" << endl;
-//        cout << "4. deleteNodeByKey()" << endl;
-//        cout << "5. updateNodeByKey()" << endl;
-//        cout << "6. print()" << endl;
-//        cout << "7. Clear Screen" << endl << endl;
-//
-//        cin >> option;
-//        Node* n1 = new Node();
-//        //Node n1;
-//
-//        switch (option) {
-//        case 0:
-//            break;
-//        case 1:
-//            cout << "Append Node Operation \nEnter key & data of the Node to be Appended" << endl;
-//            cin >> temp_id;
-//            cin >> temp_owner_name;
-//            cin >> temp_email;
-//            cin >> temp_balance;
-//            cin >> temp_card_num;
-//            cin >> temp_card_pin;
-//            n1->setId(temp_id);
-//            n1->setName(temp_owner_name);
-//            n1->setEmail(temp_email);
-//            n1->setBalance(temp_balance);
-//            n1->setCardNum(temp_card_num);
-//            n1->setCardPin(temp_card_pin);
-//            s.appendNode(n1);
-//            //cout<<n1.key<<" = "<<n1.data<<endl;
-//            break;
-//
-//        case 2:
-//            cout << "Prepend Node Operation \nEnter key & data of the Node to be Prepended" << endl;
-//            cin >> temp_id;
-//            cin >> temp_owner_name;
-//            cin >> temp_email;
-//            cin >> temp_balance;
-//            cin >> temp_card_num;
-//            cin >> temp_card_pin;
-//            n1->setId(temp_id);
-//            n1->setName(temp_owner_name);
-//            n1->setEmail(temp_email);
-//            n1->setBalance(temp_balance);
-//            n1->setCardNum(temp_card_num);
-//            n1->setCardPin(temp_card_pin);
-//            s.prependNode(n1);
-//            break;
-//
-//        case 3:
-//            cout << "Insert Node After Operation \nEnter key of existing Node after which you want to Insert this New node: " << endl;
-//            cin >> k1;
-//            cout << "Enter key & data of the New Node first: " << endl;
-//            cin >> temp_id;
-//            cin >> temp_owner_name;
-//            cin >> temp_email;
-//            cin >> temp_balance;
-//            cin >> temp_card_num;
-//            cin >> temp_card_pin;
-//            n1->setId(temp_id);
-//            n1->setName(temp_owner_name);
-//            n1->setEmail(temp_email);
-//            n1->setBalance(temp_balance);
-//            n1->setCardNum(temp_card_num);
-//            n1->setCardPin(temp_card_pin);
-//
-//            s.insertNodeAfter(k1, n1);
-//            break;
-//
-//        case 4:
-//
-//            cout << "Delete Node By Key Operation - \nEnter key of the Node to be deleted: " << endl;
-//            cin >> k1;
-//            s.deleteNodeByKey(k1);
-//
-//            break;
-//        case 5:
-//            cout << "Update Node By Key Operation - \nEnter key & NEW data to be updated" << endl;
-//            cin >> temp_id;
-//            cin >> temp_owner_name;
-//            cin >> temp_email;
-//            cin >> temp_balance;
-//            cin >> temp_card_num;
-//            cin >> temp_card_pin;
-//            n1->setId(temp_id);
-//            n1->setName(temp_owner_name);
-//            n1->setEmail(temp_email);
-//            n1->setBalance(temp_balance);
-//            n1->setCardNum(temp_card_num);
-//            n1->setCardPin(temp_card_pin);
-//            s.updateNodeByKey(temp_id, temp_owner_name, temp_email, temp_balance, temp_card_num, temp_card_pin);
-//
-//            break;
-//        case 6:
-//            s.printList();
-//
-//            break;
-//        case 7:
-//            system("cls");
-//            break;
-//        default:
-//            cout << "Enter Proper Option number " << endl;
-//        }
-//
-//    } while (option != 0);
-//
-//    return 0;
-//}
