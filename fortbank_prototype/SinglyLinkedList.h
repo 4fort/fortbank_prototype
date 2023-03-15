@@ -96,6 +96,18 @@ public:
         return temp;
     }
 
+    Node* validate(string userCard, string userPin) {
+        Node* temp = NULL;
+        Node* ptr = head;
+        while (ptr != NULL) {
+            if (ptr->getCardNum() == userCard && ptr->getCardPin() == userPin) {
+                temp = ptr;
+            }
+            ptr = ptr->next;
+        }
+        return temp;
+    }
+
     // 2. Append a node to the list
     void appendNode(Node* n) {
         if (nodeExists(n->getId()) != NULL) {

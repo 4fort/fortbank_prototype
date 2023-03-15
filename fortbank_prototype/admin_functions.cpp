@@ -6,8 +6,8 @@
 
 using namespace std;
 
-SQL_CONNECTOR db_connect;
-SinglyLinkedList sll;
+extern SQL_CONNECTOR db_connect;
+extern SinglyLinkedList sll;
 extern custlib cstmlib;
 
 extern int main();
