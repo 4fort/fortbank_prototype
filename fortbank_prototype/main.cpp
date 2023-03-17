@@ -10,6 +10,7 @@ SinglyLinkedList sll;
 custlib cstmlib;
 
 extern int ADMIN_MAIN();
+extern int CLIENT_MAIN(Node* User);
 
 int main()
 {
@@ -32,16 +33,23 @@ int main()
         cin >> userPin;
 
         if (sll.validate(userCard, userPin)) {
-            sll.printSpecific(sll.validate(userCard, userPin)->getId());
-        }
-        else {
-            cout << "Account does not exist!";
-        }
+            Node* User = new Node();
 
-        if (userCard == "admin" && userPin == "admin123") {
+            User->setId(sll.validate(userCard, userPin)->getId());
+            User->setName(sll.validate(userCard, userPin)->getName());
+            User->setCardNum(sll.validate(userCard, userPin)->getCardNum());
+            User->setCardPin(sll.validate(userCard, userPin)->getCardPin());
+            User->setBalance(sll.validate(userCard, userPin)->getBalance());
+
+            CLIENT_MAIN(User);
+        }
+        else if (userCard == "admin" && userPin == "admin123") {
             system("cls");
             ADMIN_MAIN();
         }
-
+        else {
+            system("cls");
+            cout << "Account does not exist!\n";
+        }
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "custlib.h"
+#include <sstream>
 using namespace std;
 extern custlib cstmlib;
 
