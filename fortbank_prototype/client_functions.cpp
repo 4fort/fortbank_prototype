@@ -1,9 +1,11 @@
 #include <iostream>
 #include <sstream>
+#include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 using namespace std;
 
 Node* current_user = new Node();
+extern SQL_CONNECTOR db_connect;
 extern SinglyLinkedList sll;
 
 extern int main();
@@ -56,8 +58,9 @@ void DEPOSIT() {
 	cout << "Deposit: ";
 	cin >> temp_input;
 	if (temp_input != NULL) {
-		current_user->setBalance(current_user->getBalance() + to_string(temp_input));
-		sll.updateNodeByKey(current_user->getId(), current_user->getEmail(), current_user->getName(), current_user->getCardPin(), current_user->getBalance());
+		current_user->setBalance(to_string(stoi(current_user->getBalance()) + temp_input));
+		sll.updateNode(current_user);
+		db_connect.Update(current_user);
 	}
 	else {
 		cout << "Invalid input!";

@@ -215,6 +215,17 @@ public:
 
     }
 
+    void updateNode(Node* n) {
+        Node* ptr = nodeExists(n->getId());
+        if (ptr != NULL) {
+            ptr->setName(n->getName());
+            ptr->setEmail(n->getEmail());
+            ptr->setCardPin(n->getCardPin());
+            ptr->setBalance(n->getBalance());
+            cout << "Node Data Updated Successfully" << endl;
+        }
+    }
+
     // 7th printing
     void printList() {
         if (head == NULL) {

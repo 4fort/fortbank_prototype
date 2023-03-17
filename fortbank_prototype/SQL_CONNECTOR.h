@@ -61,14 +61,14 @@ public :
             cout << "Query Failed: " << mysql_error(conn) << endl;
         }
     }
-	void Insert(string name, string email, string card_num, string card_pin, string balance) {
+	void Insert(Node* user) {
         connect();
-        string q = "INSERT INTO Users (owner_name, email, card_num, card_pin, balance) VALUES ('" + name + "', '" + email + "', " + card_num + ", " + card_pin + ", " + balance + ')';
+        string q = "INSERT INTO Users (owner_name, email, card_num, card_pin, balance) VALUES ('" + user->getName() + "', '" + user->getEmail() + "', " + user->getCardNum() + ", " + user->getCardPin() + ", " + user->getBalance() + ')';
         query(q);
 	}
-    void Update(string temp_id, string name, string email, string card_pin, string balance) {
+    void Update(Node* user) {
         connect();
-        string q = "UPDATE Users SET owner_name = '" + name + "', email = '" + email + "', card_pin = " + card_pin + ", balance = " + balance + " WHERE id = " + temp_id;
+        string q = "UPDATE Users SET owner_name = '" + user->getName() + "', email = '" + user->getEmail() + "', card_pin = " + user->getCardPin() + ", balance = " + user->getBalance() + " WHERE id = " + user->getId();
         query(q);
     }
     void Delete(string id) {

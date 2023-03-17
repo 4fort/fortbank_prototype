@@ -37,6 +37,7 @@ int main()
 
             User->setId(sll.validate(userCard, userPin)->getId());
             User->setName(sll.validate(userCard, userPin)->getName());
+            User->setEmail(sll.validate(userCard, userPin)->getEmail());
             User->setCardNum(sll.validate(userCard, userPin)->getCardNum());
             User->setCardPin(sll.validate(userCard, userPin)->getCardPin());
             User->setBalance(sll.validate(userCard, userPin)->getBalance());
