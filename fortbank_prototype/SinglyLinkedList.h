@@ -97,6 +97,19 @@ public:
         return temp;
     }
 
+    Node* nodeExistByCard(string card) {
+        Node* temp = NULL;
+        Node* ptr = head;
+        while (ptr != NULL) {
+            if (ptr->getCardNum() == card) {
+                temp = ptr;
+            }
+            ptr = ptr->next;
+
+        }
+        return temp;
+    }
+
     Node* validate(string userCard, string userPin) {
         Node* temp = NULL;
         Node* ptr = head;
@@ -126,7 +139,7 @@ public:
                 }
                 ptr->next = n;
                 if (n->getId() == "") {
-                    n->setId(to_string(stoi(ptr->getId()) + 1));
+                    n->setId("*" + to_string(stoi(ptr->getId()) + 1));
                 }
                 //cout << "Node Appended" << endl;
             }
@@ -196,7 +209,7 @@ public:
                 }
             }
         }
-
+        system("pause");
     }
     // 6th update node
     void updateNodeByKey(string temp_id, string temp_owner_name, string temp_email, string temp_card_pin, string temp_balance) {
@@ -223,6 +236,9 @@ public:
             ptr->setCardPin(n->getCardPin());
             ptr->setBalance(n->getBalance());
             cout << "Node Data Updated Successfully" << endl;
+        }
+        else {
+            cout << "Node Doesn't exist with key value : " << n->getId() << endl;
         }
     }
 

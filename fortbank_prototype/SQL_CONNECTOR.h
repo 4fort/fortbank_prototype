@@ -25,23 +25,22 @@ public :
         conn = mysql_init(0);
         conn = mysql_real_connect(conn, host, user, passwd, db, port, NULL, 0);
 
-        if (conn) {
-            //puts("Connected!\n");
-            createList("");
-        }
-        else {
-            puts("Connection to database failed!");
+        if (sll.nodeExists("1") == NULL) {
+            if (conn) {
+                //puts("Connected!\n");
+                createList();
+            }
+            else {
+                puts("Connection to database failed!");
+            }
         }
 	}
     void query(string query) {
         const char* q = query.c_str();
         qstate = mysql_query(conn, q);
     }
-    void createList(string id) {
+    void createList() {
         string q;
-        if (id != "") {
-            q = "SELECT * FROM Users WHERE id = " + id;
-        }
         q = "SELECT * FROM Users";
         query(q);
         if (!qstate) {

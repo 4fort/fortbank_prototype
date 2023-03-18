@@ -96,8 +96,8 @@ void USER_ADD() {
     sll_user->setCardNum(cardNumGenerator());
     sll_user->setCardPin("1234");
 
-    sll.appendNode(sll_user);
     db_connect.Insert(sll_user);
+    sll.appendNode(sll_user);
 }
 
 //void USER_UPDATE() {
@@ -203,7 +203,7 @@ void USER_UPDATE() {
             break;
         }
         user->setName(temp_input);
-        USER_UPDATE();
+        break;
     case 2:
         cout << "Old Email [ " << user->getEmail() << " ]" << endl;
         cout << "New Email: ";
@@ -213,9 +213,9 @@ void USER_UPDATE() {
             break;
         }
         user->setEmail(temp_input);
-        USER_UPDATE();
+        break;
     case 3:
-        cout << "Old Pin [ P" << user->getCardPin() << " ]" << endl;
+        cout << "Old Pin [ " << user->getCardPin() << " ]" << endl;
         cout << "New Pin: ";
         cin.ignore();
         getline(cin, temp_input);
@@ -223,7 +223,7 @@ void USER_UPDATE() {
             break;
         }
         user->setCardPin(temp_input);
-        USER_UPDATE();
+        break;
     case 4:
         cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
         cout << "Add Balance: ";
@@ -232,18 +232,18 @@ void USER_UPDATE() {
         if (temp_input == "") {
             break;
         }
-        user->setBalance(to_string((stoi(user->getBalance()) + stoi(temp_input))));
-        USER_UPDATE();
+        user->setBalance(to_string((stod(user->getBalance()) + stod(temp_input))));
+        break;
     case 5:
-        cout << "Old Balance [ " << user->getBalance() << " ]" << endl;
+        cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
         cout << "Minus Balance: ";
         cin.ignore();
         getline(cin, temp_input);
         if (temp_input == "") {
             break;
         }
-        user->setBalance(to_string((stoi(user->getBalance()) - stoi(temp_input))));
-        USER_UPDATE();
+        user->setBalance(to_string((stod(user->getBalance()) - stod(temp_input))));
+        break;
     default:
         USER_UPDATE();
     }
