@@ -37,7 +37,7 @@ int CLIENT_MAIN(Node* loggedin_user) {
 		cout << char(186) << "                     " << char(186) << endl;
 		cout << char(200);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(188) << endl;
 
-		sll.printSpecific(loggedin_user->getId());
+		sll.printSpecific(current_user->getId());
 		
 		string menu[] = { "Logout", "Deposit", "Withdraw", "Transfer", "Change Pin" };
 		for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
@@ -154,6 +154,8 @@ void CHANGE_PIN() {
 
 	if (temp_input != NULL) {
 		current_user->setCardPin(to_string(temp_input));
+		sll.updateNode(current_user);
+		db_connect.Update(current_user);
 	}
 	else {
 		cout << "Invalid input!";
