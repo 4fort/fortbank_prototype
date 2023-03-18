@@ -146,5 +146,16 @@ void TRANSFER() {
 }
 
 void CHANGE_PIN() {
+	cout << current_user->getCardPin() << endl;
 
+	int temp_input;
+	cout << "Enter new pin: ";
+	cin >> temp_input;
+
+	if (temp_input != NULL) {
+		current_user->setCardPin(to_string(temp_input));
+	}
+	else {
+		cout << "Invalid input!";
+	}
 }
