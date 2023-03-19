@@ -14,7 +14,7 @@ extern int CLIENT_MAIN(Node* User);
 
 int main()
 {
-    if (sll.nodeExists("1") == NULL) {
+    if (sll.nodeExists(1) == NULL) {
         db_connect.connect();
     }
     while (true) {
@@ -32,21 +32,21 @@ int main()
         cout << "User Pin: ";
         cin >> userPin;
 
-        if (sll.validate(userCard, userPin)) {
-            Node* User = new Node();
-
-            User->setId(sll.validate(userCard, userPin)->getId());
-            User->setName(sll.validate(userCard, userPin)->getName());
-            User->setEmail(sll.validate(userCard, userPin)->getEmail());
-            User->setCardNum(sll.validate(userCard, userPin)->getCardNum());
-            User->setCardPin(sll.validate(userCard, userPin)->getCardPin());
-            User->setBalance(sll.validate(userCard, userPin)->getBalance());
-
-            CLIENT_MAIN(User);
-        }
-        else if (userCard == "admin" && userPin == "admin123") {
+        if (userCard == "admin" && userPin == "admin123") {
             system("cls");
             ADMIN_MAIN();
+        }
+        else if (sll.validate(stoi(userCard), stoi(userPin))) {
+            Node* User = new Node();
+
+            User->setId(sll.validate(stoi(userCard), stoi(userPin))->getId());
+            User->setName(sll.validate(stoi(userCard), stoi(userPin))->getName());
+            User->setEmail(sll.validate(stoi(userCard), stoi(userPin))->getEmail());
+            User->setCardNum(sll.validate(stoi(userCard), stoi(userPin))->getCardNum());
+            User->setCardPin(sll.validate(stoi(userCard), stoi(userPin))->getCardPin());
+            User->setBalance(sll.validate(stoi(userCard), stoi(userPin))->getBalance());
+
+            CLIENT_MAIN(User);
         }
         else {
             system("cls");

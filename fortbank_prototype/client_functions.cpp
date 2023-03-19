@@ -79,7 +79,7 @@ void DEPOSIT() {
 	cout << "Deposit: ";
 	cin >> temp_input;
 	if (temp_input != NULL) {
-		current_user->setBalance(to_string(stod(current_user->getBalance()) + temp_input));
+		current_user->setBalance(current_user->getBalance() + temp_input);
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);
 	}
@@ -95,8 +95,8 @@ void WITHDRAW() {
 	cout << "Withdraw: ";
 	cin >> temp_input;
 	if (temp_input != NULL) {
-		if (stod(current_user->getBalance()) > temp_input) {
-			current_user->setBalance(to_string(stod(current_user->getBalance()) - temp_input));
+		if (current_user->getBalance() > temp_input) {
+			current_user->setBalance(current_user->getBalance() - temp_input);
 			sll.updateNode(current_user);
 			db_connect.Update(current_user);
 		}
@@ -113,7 +113,7 @@ void TRANSFER() {
 	cout << current_user->getBalance() << endl;
 
 	int temp_input;
-	string receiver_card;
+	int receiver_card;
 
 	cout << "Receiver Card Number: ";
 	cin >> receiver_card;
@@ -122,12 +122,12 @@ void TRANSFER() {
 		cout << "Transfer Amount: ";
 		cin >> temp_input;
 		if (temp_input != NULL) {
-			if (stod(current_user->getBalance()) > temp_input) {
-				current_user->setBalance(to_string(stod(current_user->getBalance()) - temp_input));
+			if (current_user->getBalance() > temp_input) {
+				current_user->setBalance(current_user->getBalance() - temp_input);
 				sll.updateNode(current_user);
 				db_connect.Update(current_user);
 
-				receiver->setBalance(to_string(stod(receiver->getBalance()) + temp_input));
+				receiver->setBalance(receiver->getBalance() + temp_input);
 				sll.updateNode(receiver);
 				db_connect.Update(receiver);
 			}
@@ -153,7 +153,7 @@ void CHANGE_PIN() {
 	cin >> temp_input;
 
 	if (temp_input != NULL) {
-		current_user->setCardPin(to_string(temp_input));
+		current_user->setCardPin(temp_input);
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);
 	}

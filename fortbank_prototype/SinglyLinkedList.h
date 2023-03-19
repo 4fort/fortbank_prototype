@@ -6,17 +6,17 @@ using namespace std;
 extern custlib cstmlib;
 
 class Node {
-    string id;
+    int id;
     string owner_name;
     string email;
-    string card_num;
-    string card_pin;
-    string balance;
+    int card_num;
+    int card_pin;
+    double balance;
 public:
-    void setId(string x) {
+    void setId(int x) {
         this->id = x;
     }
-    string getId() {
+    int getId() {
         return this->id;
     }
     void setName(string x) {
@@ -31,37 +31,37 @@ public:
     string getEmail() {
         return this->email;
     }
-    void setCardNum(string x) {
+    void setCardNum(int x) {
         this->card_num = x;
     }
-    string getCardNum() {
+    int getCardNum() {
         return this->card_num;
     }
-    void setCardPin(string x) {
+    void setCardPin(int x) {
         this->card_pin = x;
     }
-    string getCardPin() {
+    int getCardPin() {
         return this->card_pin;
     }
-    void setBalance(string x) {
+    void setBalance(int x) {
         this->balance = x;
     }
-    string getBalance() {
+    int getBalance() {
         return this->balance;
     }
 
     Node* next;
 
     Node() {
-        id = "";
+        id = 0;
         owner_name = "";
         email = "";
-        card_num = "";
-        card_pin = "";
-        balance = "";
+        card_num = 0;
+        card_pin = 0;
+        balance = 0;
         next = NULL;
     }
-    Node(string temp_id, string temp_owner_name, string temp_email, string temp_card_num, string temp_card_pin, string temp_balance) {
+    Node(int temp_id, string temp_owner_name, string temp_email, int temp_card_num, int temp_card_pin, double temp_balance) {
         id = temp_id;
         owner_name = temp_owner_name;
         email = temp_email;
@@ -83,7 +83,7 @@ public:
     }
 
     // 1. CHeck if node exists using key value
-    Node* nodeExists(string temp_id) {
+    Node* nodeExists(int temp_id) {
         Node* temp = NULL;
 
         Node* ptr = head;
@@ -97,7 +97,7 @@ public:
         return temp;
     }
 
-    Node* nodeExistByCard(string card) {
+    Node* nodeExistByCard(int card) {
         Node* temp = NULL;
         Node* ptr = head;
         while (ptr != NULL) {
@@ -110,7 +110,7 @@ public:
         return temp;
     }
 
-    Node* validate(string userCard, string userPin) {
+    Node* validate(int userCard, int userPin) {
         Node* temp = NULL;
         Node* ptr = head;
         while (ptr != NULL) {
@@ -138,8 +138,8 @@ public:
                     ptr = ptr->next;
                 }
                 ptr->next = n;
-                if (n->getId() == "") {
-                    n->setId("*" + to_string(stoi(ptr->getId()) + 1));
+                if (n->getId() == NULL) {
+                    n->setId(ptr->getId() + 1);
                 }
                 //cout << "Node Appended" << endl;
             }
@@ -177,7 +177,7 @@ public:
     }*/
 
     // 5. Delete node by unique key
-    void deleteNodeByKey(string temp_id) {
+    void deleteNodeByKey(int temp_id) {
         if (head == NULL) {
             cout << "Singly Linked List already Empty. Cant delete" << endl;
         }
@@ -212,7 +212,7 @@ public:
         system("pause");
     }
     // 6th update node
-    void updateNodeByKey(string temp_id, string temp_owner_name, string temp_email, string temp_card_pin, string temp_balance) {
+    /*void updateNodeByKey(int temp_id, string temp_owner_name, string temp_email, int temp_card_pin, double temp_balance) {
 
         Node* ptr = nodeExists(temp_id);
         if (ptr != NULL) {
@@ -226,7 +226,7 @@ public:
             cout << "Node Doesn't exist with key value : " << temp_id << endl;
         }
 
-    }
+    }*/
 
     void updateNode(Node* n) {
         Node* ptr = nodeExists(n->getId());
@@ -276,7 +276,7 @@ public:
     }
 
     // 8th printing specific
-    Node* selectSpecific(string temp_id) {
+   /* Node* selectSpecific(int temp_id) {
         if (head == NULL) {
             cout << "No Nodes in Singly Linked List";
         }
@@ -289,9 +289,9 @@ public:
                 return NULL;
             }
         }
-    }
+    }*/
 
-    void printSpecific(string temp_id) {
+    void printSpecific(int temp_id) {
         if (head == NULL) {
             cout << "No Nodes in Singly Linked List";
         }

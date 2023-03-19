@@ -16,7 +16,7 @@ void USER_UPDATE();
 void USER_DELETE();
 void RETURNTO_MENU();
 
-string cardNumGenerator();
+int cardNumGenerator();
 
 int ADMIN_MAIN() {
     while (true) {
@@ -91,80 +91,15 @@ void USER_ADD() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    sll_user->setBalance(temp_input);
+    sll_user->setBalance(stod(temp_input));
 
     sll_user->setCardNum(cardNumGenerator());
-    sll_user->setCardPin("1234");
+    sll_user->setCardPin(1234);
 
     db_connect.Insert(sll_user);
+    cout << "test";
     sll.appendNode(sll_user);
 }
-
-//void USER_UPDATE() {
-//    Node* sll_user = new Node();
-//    string temp_input;
-//    string temp_id;
-//    system("cls");
-//    cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
-//    //db_connect.connect();
-//    sll.printList();
-//
-//    cout << "Select ID\nadmin/# ";
-//    cin >> temp_id;
-//    if (temp_id == "") {
-//        USER_UPDATE();
-//    }
-//    else if (sll.selectSpecific(temp_id) == NULL) {
-//        USER_UPDATE();
-//    }
-//    else if (temp_id == "!r") {
-//        RETURNTO_MENU();
-//    }
-//
-//    system("cls");
-//    cout << "TIP: You can press \x1b[1mRETURN\x1b[0m [ <-| ] to skip or use default value.\n";
-//    //db_connect.print(temp_id);
-//    sll.printSpecific(temp_id);
-//
-//    cout << "Enter Updated Name: ";
-//    cin.ignore();
-//    getline(cin, temp_input);
-//    if (temp_input.empty()) {
-//        //temp_input = db_connect.selectSpecific(temp_id, 1);
-//        temp_input = sll.selectSpecific(temp_id)->getName();
-//    }
-//    else if (temp_input == "!r") {
-//        RETURNTO_MENU();
-//    }
-//    sll_user->setName(temp_input);
-//
-//    cout << "Enter Updated Email: ";
-//    getline(cin, temp_input);
-//    if (temp_input.empty()) {
-//        //temp_input = db_connect.selectSpecific(temp_id, 2);
-//        temp_input = sll.selectSpecific(temp_id)->getEmail();
-//    }
-//    sll_user->setEmail(temp_input);
-//
-//    cout << "Enter Updated Balance: ";
-//    getline(cin, temp_input);
-//    if (temp_input.empty()) {
-//        //temp_input = db_connect.selectSpecific(temp_id, 3);
-//        temp_input = sll.selectSpecific(temp_id)->getBalance();
-//    }
-//    sll_user->setBalance(temp_input);
-//
-//    cout << "Enter New Pin: ";
-//    getline(cin, temp_input);
-//    if (temp_input.empty()) {
-//        //temp_input = db_connect.selectSpecific(temp_id, 4);
-//        temp_input = sll.selectSpecific(temp_id)->getCardPin();
-//    }
-//    sll_user->setCardPin(temp_input);
-//
-//    db_connect.Update(temp_id, sll_user->getName(), sll_user->getEmail(), sll_user->getCardPin(), sll_user->getBalance());
-//    sll.updateNodeByKey(temp_id, sll_user->getName(), sll_user->getEmail(), sll_user->getCardPin(), sll_user->getBalance());
-//}
 
 void USER_UPDATE() {
     Node* user = new Node();
@@ -180,12 +115,12 @@ void USER_UPDATE() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    else if (temp_input == "" || sll.selectSpecific(temp_input) == NULL) {
+    else if (temp_input == "" || sll.nodeExists(stoi(temp_input)) == NULL) {
         USER_UPDATE();
     }
-    user = sll.selectSpecific(temp_input);
+    user = sll.nodeExists(stoi(temp_input));
     system("cls");
-    sll.printSpecific(temp_input);
+    sll.printSpecific(stoi(temp_input));
     for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
         cout << "[" << i << "] " << menu[i] << '\n';
     }
@@ -222,7 +157,7 @@ void USER_UPDATE() {
         if (temp_input == "") {
             break;
         }
-        user->setCardPin(temp_input);
+        user->setCardPin(stoi(temp_input));
         break;
     case 4:
         cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
@@ -232,7 +167,7 @@ void USER_UPDATE() {
         if (temp_input == "") {
             break;
         }
-        user->setBalance(to_string((stod(user->getBalance()) + stod(temp_input))));
+        user->setBalance(user->getBalance() + stod(temp_input));
         break;
     case 5:
         cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
@@ -242,7 +177,7 @@ void USER_UPDATE() {
         if (temp_input == "") {
             break;
         }
-        user->setBalance(to_string((stod(user->getBalance()) - stod(temp_input))));
+        user->setBalance(user->getBalance() - stod(temp_input));
         break;
     default:
         USER_UPDATE();
@@ -264,7 +199,7 @@ void USER_DELETE() {
         RETURNTO_MENU();
     }
 
-    sll.deleteNodeByKey(temp_input);
+    sll.deleteNodeByKey(stoi(temp_input));
     db_connect.Delete(temp_input);
 }
 
@@ -273,7 +208,7 @@ void RETURNTO_MENU() {
     ADMIN_MAIN();
 }
 
-string cardNumGenerator() {
+int cardNumGenerator() {
     srand(time(0));
     char randomizer;
     string random_card = "456";
@@ -281,5 +216,5 @@ string cardNumGenerator() {
         randomizer = rand() % (57 - 49 + 1) + 49;
         random_card = random_card + randomizer;
     }
-    return random_card;
+    return stoi(random_card);
 }

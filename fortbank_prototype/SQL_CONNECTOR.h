@@ -25,7 +25,7 @@ public :
         conn = mysql_init(0);
         conn = mysql_real_connect(conn, host, user, passwd, db, port, NULL, 0);
 
-        if (sll.nodeExists("1") == NULL) {
+        if (sll.nodeExists(1) == NULL) {
             if (conn) {
                 //puts("Connected!\n");
                 createList();
@@ -47,12 +47,12 @@ public :
             res = mysql_store_result(conn);
             while (row = mysql_fetch_row(res)) {
                 Node* sll_user = new Node();
-                sll_user->setId(row[0]);
+                sll_user->setId(stoi(row[0]));
                 sll_user->setName(row[1]);
                 sll_user->setEmail(row[2]);
-                sll_user->setCardNum(row[3]);
-                sll_user->setCardPin(row[4]);
-                sll_user->setBalance(row[5]);
+                sll_user->setCardNum(stoi(row[3]));
+                sll_user->setCardPin(stoi(row[4]));
+                sll_user->setBalance(stod(row[5]));
                 sll.appendNode(sll_user);
             }
         }
@@ -62,12 +62,12 @@ public :
     }
 	void Insert(Node* user) {
         connect();
-        string q = "INSERT INTO Users (owner_name, email, card_num, card_pin, balance) VALUES ('" + user->getName() + "', '" + user->getEmail() + "', " + user->getCardNum() + ", " + user->getCardPin() + ", " + user->getBalance() + ')';
+        string q = "INSERT INTO Users (owner_name, email, card_num, card_pin, balance) VALUES ('" + user->getName() + "', '" + user->getEmail() + "', " + to_string(user->getCardNum()) + ", " + to_string(user->getCardPin()) + ", " + to_string(user->getBalance()) + ')';
         query(q);
 	}
     void Update(Node* user) {
         connect();
-        string q = "UPDATE Users SET owner_name = '" + user->getName() + "', email = '" + user->getEmail() + "', card_pin = " + user->getCardPin() + ", balance = " + user->getBalance() + " WHERE id = " + user->getId();
+        string q = "UPDATE Users SET owner_name = '" + user->getName() + "', email = '" + user->getEmail() + "', card_pin = " + to_string(user->getCardPin()) + ", balance = " + to_string(user->getBalance()) + " WHERE id = " + to_string(user->getId());
         query(q);
     }
     void Delete(string id) {
