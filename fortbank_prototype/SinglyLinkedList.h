@@ -245,13 +245,13 @@ public:
     // 7th printing
     void printList() {
         if (head == NULL) {
-            cout << "No Nodes in Singly Linked List";
+            cout << "No Nodes in Singly Linked List" << endl;
         }
         else {
             cstmlib.printElement("", 120, '=');
             cout << '\n';
             cstmlib.printElement("ID", 5, ' ');
-            cstmlib.printElement("Name", 20, ' ');
+            cstmlib.printElement("Name", 30, ' ');
             cstmlib.printElement("Email", 30, ' ');
             cstmlib.printElement("Card Num", 20, ' ');
             cstmlib.printElement("Card Pin", 20, ' ');
@@ -261,7 +261,7 @@ public:
 
             while (temp != NULL) {
                 cstmlib.printElement(temp->getId(), 5, ' ');
-                cstmlib.printElement(temp->getName(), 20, ' ');
+                cstmlib.printElement(temp->getName(), 30, ' ');
                 cstmlib.printElement(temp->getEmail(), 30, ' ');
                 cstmlib.printElement(temp->getCardNum(), 20, ' ');
                 cstmlib.printElement(temp->getCardPin(), 20, ' ');
@@ -293,7 +293,7 @@ public:
 
     void printSpecific(int temp_id) {
         if (head == NULL) {
-            cout << "No Nodes in Singly Linked List";
+            cout << "No Nodes in Singly Linked List" << endl;
         }
         else {
             Node* ptr = nodeExists(temp_id);
@@ -301,14 +301,14 @@ public:
                 cstmlib.printElement("", 120, '=');
                 cout << '\n';
                 cstmlib.printElement("ID", 5, ' ');
-                cstmlib.printElement("Name", 20, ' ');
+                cstmlib.printElement("Name", 30, ' ');
                 cstmlib.printElement("Email", 30, ' ');
                 cstmlib.printElement("Card Num", 20, ' ');
                 cstmlib.printElement("Card Pin", 20, ' ');
                 cstmlib.printElement("Balance", 20, ' ');
                 cout << '\n';
                 cstmlib.printElement(ptr->getId(), 5, ' ');
-                cstmlib.printElement(ptr->getName(), 20, ' ');
+                cstmlib.printElement(ptr->getName(), 30, ' ');
                 cstmlib.printElement(ptr->getEmail(), 30, ' ');
                 cstmlib.printElement(ptr->getCardNum(), 20, ' ');
                 cstmlib.printElement(ptr->getCardPin(), 20, ' ');
