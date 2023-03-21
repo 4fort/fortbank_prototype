@@ -15,7 +15,7 @@ void USER_ADD();
 void USER_UPDATE();
 void USER_DELETE();
 void RETURNTO_MENU();
-
+void selectedUsertoUpdate(int id);
 int cardNumGenerator();
 
 int ADMIN_MAIN() {
@@ -43,14 +43,14 @@ int ADMIN_MAIN() {
             main();
             break;
         case 1:
-            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
+            cout << "Type [ !r ] to return to menu.";
             USER_ADD();
             break;
         case 2:
             USER_UPDATE();
             break;
         case 3:
-            cout << "\x1b[1m[ !r ]\x1b[0m return to menu\n\n";
+            cout << "Type [ !r ] to return to menu.";
             USER_DELETE();
             break;
         default:
@@ -87,13 +87,19 @@ void USER_ADD() {
 
     cout << "Enter Balance: ";
     cin >> temp_input;
-    cin.ignore();
-    if (temp_input == "!r") {
+    if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+        cout << "Input should be a number!";
+    }
+    else if (temp_input == "!r") {
         RETURNTO_MENU();
     }
     sll_user->setBalance(stod(temp_input));
 
-    sll_user->setCardNum(cardNumGenerator());
+    int cardNum = cardNumGenerator();
+    while (sll.nodeExistByCard(cardNum) != NULL) {
+        cardNum = cardNumGenerator();
+    }
+    sll_user->setCardNum(cardNum);
     sll_user->setCardPin(1234);
 
     db_connect.Insert(sll_user);
@@ -102,12 +108,10 @@ void USER_ADD() {
 }
 
 void USER_UPDATE() {
-    Node* user = new Node();
-    string temp_input;
-    string menu[] = { "Return", "Name", "Email", "Pin", "Add Balance", "Minus Balance"};
-    int choice;
+    string temp_input, tips = "Type [ !r ] to return to menu.";
 
     system("cls");
+    cout << "[ " << tips << " ]" << endl;
     sll.printList();
     cout << "Select ID: ";
     cin >> temp_input;
@@ -118,73 +122,104 @@ void USER_UPDATE() {
     else if (temp_input == "" || sll.nodeExists(stoi(temp_input)) == NULL) {
         USER_UPDATE();
     }
-    user = sll.nodeExists(stoi(temp_input));
-    system("cls");
-    sll.printSpecific(stoi(temp_input));
-    for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
-        cout << "[" << i << "] " << menu[i] << '\n';
-    }
-    cin >> choice;
-    switch (choice)
-    {
-    case 0:
-        USER_UPDATE();
-    case 1:
-        cout << "Old Name [ " << user->getName() << " ]" << endl;
-        cout << "New Name: ";
-        cin.ignore();
-        getline(cin, temp_input);
-        if (temp_input == "") {
-            break;
-        }
-        user->setName(temp_input);
-        break;
-    case 2:
-        cout << "Old Email [ " << user->getEmail() << " ]" << endl;
-        cout << "New Email: ";
-        cin.ignore();
-        getline(cin, temp_input);
-        if (temp_input == "") {
-            break;
-        }
-        user->setEmail(temp_input);
-        break;
-    case 3:
-        cout << "Old Pin [ " << user->getCardPin() << " ]" << endl;
-        cout << "New Pin: ";
-        cin.ignore();
-        getline(cin, temp_input);
-        if (temp_input == "") {
-            break;
-        }
-        user->setCardPin(stoi(temp_input));
-        break;
-    case 4:
-        cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
-        cout << "Add Balance: ";
-        cin.ignore();
-        getline(cin, temp_input);
-        if (temp_input == "") {
-            break;
-        }
-        user->setBalance(user->getBalance() + stod(temp_input));
-        break;
-    case 5:
-        cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
-        cout << "Minus Balance: ";
-        cin.ignore();
-        getline(cin, temp_input);
-        if (temp_input == "") {
-            break;
-        }
-        user->setBalance(user->getBalance() - stod(temp_input));
-        break;
-    default:
-        USER_UPDATE();
-    }
+    selectedUsertoUpdate(stoi(temp_input));
+}
 
-    db_connect.Update(user);
-    sll.updateNode(user);
+void selectedUsertoUpdate(int id) {
+    Node* user = sll.nodeExists(id);
+    string menu[] = { "Return", "Name", "Email", "Pin", "Add Balance", "Minus Balance" };
+    string temp_input, tips;
+
+    if (user != NULL) {
+        while (true) {
+            system("cls");
+            cout << "[ " << tips << " ]" << endl;
+            sll.printSpecific(id);
+            for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
+                cout << "[" << i << "] " << menu[i] << '\n';
+            }
+            int choice;
+            cout << "Select -> ";
+            cin >> choice;
+            switch (choice)
+            {
+            case 0:
+                USER_UPDATE();
+            case 1:
+                cout << "Old Name [ " << user->getName() << " ]" << endl;
+                cout << "New Name: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                user->setName(temp_input);
+                break;
+            case 2:
+                cout << "Old Email [ " << user->getEmail() << " ]" << endl;
+                cout << "New Email: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                user->setEmail(temp_input);
+                break;
+            case 3:
+                cout << "Old Pin [ " << user->getCardPin() << " ]" << endl;
+                cout << "New Pin: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+                    user->setCardPin(stoi(temp_input));
+                    tips = "";
+                }
+                else {
+                    tips = "Input should be a number!";
+                }
+                break;
+            case 4:
+                cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
+                cout << "Add Balance: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()){
+                    user->setBalance(user->getBalance() + stod(temp_input));
+                    tips = "";
+                }
+                else {
+                    tips = "Input should be a number!";
+                }
+                break;
+            case 5:
+                cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
+                cout << "Minus Balance: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()){
+                    user->setBalance(user->getBalance() - stod(temp_input));
+                    tips = "";
+                }
+                else {
+                    tips = "Input should be a number!";
+                }
+                break;
+            default:
+                USER_UPDATE();
+            }
+            db_connect.Update(user);
+            sll.updateNode(user);
+        }
+    }
 }
 
 void USER_DELETE() {
