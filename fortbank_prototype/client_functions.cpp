@@ -75,11 +75,11 @@ int CLIENT_MAIN(Node* loggedin_user) {
 void DEPOSIT() {
 	cout << current_user->getBalance() << endl;
 
-	int temp_input;
+	string temp_input;
 	cout << "Deposit: ";
 	cin >> temp_input;
-	if (temp_input != NULL) {
-		current_user->setBalance(current_user->getBalance() + temp_input);
+	if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+		current_user->setBalance(current_user->getBalance() + stod(temp_input));
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);
 	}
@@ -91,14 +91,16 @@ void DEPOSIT() {
 void WITHDRAW() {
 	cout << current_user->getBalance() << endl;
 
-	int temp_input;
+	string temp_input;
 	cout << "Withdraw: ";
 	cin >> temp_input;
-	if (temp_input != NULL) {
-		if (current_user->getBalance() > temp_input) {
-			current_user->setBalance(current_user->getBalance() - temp_input);
-			sll.updateNode(current_user);
-			db_connect.Update(current_user);
+	if (stod(temp_input) != NULL) {
+		if (current_user->getBalance() > stod(temp_input)) {
+			if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+				current_user->setBalance(current_user->getBalance() - stod(temp_input));
+				sll.updateNode(current_user);
+				db_connect.Update(current_user);
+			}
 		}
 		else {
 			cout << "Not enough Balance!";
@@ -112,7 +114,7 @@ void WITHDRAW() {
 void TRANSFER() {
 	cout << current_user->getBalance() << endl;
 
-	int temp_input;
+	string temp_input;
 	int receiver_card;
 
 	cout << "Receiver Card Number: ";
@@ -121,15 +123,18 @@ void TRANSFER() {
 	if (receiver != NULL) {
 		cout << "Transfer Amount: ";
 		cin >> temp_input;
-		if (temp_input != NULL) {
-			if (current_user->getBalance() > temp_input) {
-				current_user->setBalance(current_user->getBalance() - temp_input);
-				sll.updateNode(current_user);
-				db_connect.Update(current_user);
-
-				receiver->setBalance(receiver->getBalance() + temp_input);
-				sll.updateNode(receiver);
-				db_connect.Update(receiver);
+		if (stod(temp_input) != NULL) {
+			if (current_user->getBalance() > stod(temp_input)) {
+				if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+					current_user->setBalance(current_user->getBalance() + stod(temp_input));
+					sll.updateNode(current_user);
+					db_connect.Update(current_user);
+				}
+				if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+					receiver->setBalance(receiver->getBalance() + stod(temp_input));
+					sll.updateNode(receiver);
+					db_connect.Update(receiver);
+				}
 			}
 			else {
 				cout << "Not enough Balance!";

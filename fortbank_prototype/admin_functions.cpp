@@ -43,14 +43,14 @@ int ADMIN_MAIN() {
             main();
             break;
         case 1:
-            cout << "Type [ !r ] to return to menu.";
+            cout << "Type [ !r ] to return to menu." << endl;
             USER_ADD();
             break;
         case 2:
             USER_UPDATE();
             break;
         case 3:
-            cout << "Type [ !r ] to return to menu.";
+            cout << "Type [ !r ] to return to menu." << endl;
             USER_DELETE();
             break;
         default:
