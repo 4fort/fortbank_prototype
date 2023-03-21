@@ -43,10 +43,10 @@ public:
     int getCardPin() {
         return this->card_pin;
     }
-    void setBalance(int x) {
+    void setBalance(double x) {
         this->balance = x;
     }
-    int getBalance() {
+    double getBalance() {
         return this->balance;
     }
 

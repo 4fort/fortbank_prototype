@@ -3,7 +3,6 @@
 #include <mysql.h>
 #include <sstream>
 #include "SinglyLinkedList.h"
-#include "custlib.h"
 using namespace std;
 extern SinglyLinkedList sll;
 
@@ -59,6 +58,9 @@ public :
         else {
             cout << "Query Failed: " << mysql_error(conn) << endl;
         }
+    }
+    int getLastId() {
+        return mysql_insert_id(conn);
     }
 	void Insert(Node* user) {
         connect();

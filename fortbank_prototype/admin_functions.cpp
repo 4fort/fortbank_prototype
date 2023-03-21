@@ -119,15 +119,15 @@ void USER_UPDATE() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    else if (temp_input == "" || sll.nodeExists(stoi(temp_input)) == NULL) {
-        USER_UPDATE();
+    else if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+        selectedUsertoUpdate(stoi(temp_input));
     }
-    selectedUsertoUpdate(stoi(temp_input));
+    USER_UPDATE();
 }
 
 void selectedUsertoUpdate(int id) {
     Node* user = sll.nodeExists(id);
-    string menu[] = { "Return", "Name", "Email", "Pin", "Add Balance", "Minus Balance" };
+    string menu[] = { "Return", "Name", "Email", "Pin", "Add Balance", "Minus Balance", "Set Balance"};
     string temp_input, tips;
 
     if (user != NULL) {
@@ -182,7 +182,7 @@ void selectedUsertoUpdate(int id) {
                 }
                 break;
             case 4:
-                cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
+                cout << "Old Balance [ P " << user->getBalance() << " ]" << endl;
                 cout << "Add Balance: ";
                 cin.ignore();
                 getline(cin, temp_input);
@@ -198,7 +198,7 @@ void selectedUsertoUpdate(int id) {
                 }
                 break;
             case 5:
-                cout << "Old Balance [ P" << user->getBalance() << " ]" << endl;
+                cout << "Old Balance [ P " << user->getBalance() << " ]" << endl;
                 cout << "Minus Balance: ";
                 cin.ignore();
                 getline(cin, temp_input);
@@ -207,6 +207,22 @@ void selectedUsertoUpdate(int id) {
                 }
                 if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()){
                     user->setBalance(user->getBalance() - stod(temp_input));
+                    tips = "";
+                }
+                else {
+                    tips = "Input should be a number!";
+                }
+                break;
+            case 6:
+                cout << "Old Balance [ P " << user->getBalance() << " ]" << endl;
+                cout << "Set Balance: ";
+                cin.ignore();
+                getline(cin, temp_input);
+                if (temp_input == "") {
+                    break;
+                }
+                if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+                    user->setBalance(stod(temp_input));
                     tips = "";
                 }
                 else {
@@ -233,9 +249,10 @@ void USER_DELETE() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-
-    sll.deleteNodeByKey(stoi(temp_input));
-    db_connect.Delete(temp_input);
+    else if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+        sll.deleteNodeByKey(stoi(temp_input));
+        db_connect.Delete(temp_input);
+    }
 }
 
 void RETURNTO_MENU() {
