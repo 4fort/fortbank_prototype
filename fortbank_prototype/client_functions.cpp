@@ -153,12 +153,12 @@ void TRANSFER() {
 void CHANGE_PIN() {
 	cout << current_user->getCardPin() << endl;
 
-	int temp_input;
+	string temp_input;
 	cout << "Enter new pin: ";
 	cin >> temp_input;
 
-	if (temp_input != NULL) {
-		current_user->setCardPin(temp_input);
+	if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+		current_user->setCardPin(stoi(temp_input));
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);
 	}

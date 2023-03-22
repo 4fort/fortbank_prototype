@@ -7,6 +7,6 @@ class custlib {
 public:
 	template<typename T> void printElement(T t, const int& width, char fill)
 	{
-		cout << left << setw(width) << setfill(fill) << t;
+		cout << fixed << setprecision(2) << left << setw(width) << setfill(fill) << t;
 	}
 };

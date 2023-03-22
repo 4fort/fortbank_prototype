@@ -36,7 +36,7 @@ int main()
             system("cls");
             ADMIN_MAIN();
         }
-        else if (find_if(userCard.begin(), userCard.end(), isdigit) != userCard.end() || find_if(userPin.begin(), userPin.end(), isdigit) != userPin.end()) {
+        else if (find_if(userCard.begin(), userCard.end(), isdigit) != userCard.end() && find_if(userPin.begin(), userPin.end(), isdigit) != userPin.end()) {
             if (sll.validate(stoi(userCard), stoi(userPin))) {
                 Node* User = new Node();
 
