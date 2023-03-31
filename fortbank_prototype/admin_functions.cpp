@@ -1,5 +1,7 @@
 #include <iostream>
 #include <mysql.h>
+#include <regex>
+#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 #include "custlib.h"
@@ -87,7 +89,7 @@ void USER_ADD() {
 
     cout << "Enter Balance: ";
     cin >> temp_input;
-    if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+    if (!regex_match(temp_input, input_regex)) {
         cout << "Input should be a number!";
     }
     else if (temp_input == "!r") {
@@ -119,7 +121,7 @@ void USER_UPDATE() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    else if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+    else if(regex_match(temp_input, input_regex)) {
         selectedUsertoUpdate(stoi(temp_input));
     }
     USER_UPDATE();
@@ -173,7 +175,7 @@ void selectedUsertoUpdate(int id) {
                 if (temp_input == "") {
                     break;
                 }
-                if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+                if (regex_match(temp_input, input_regex)) {
                     user->setCardPin(stoi(temp_input));
                     tips = "";
                 }
@@ -189,7 +191,7 @@ void selectedUsertoUpdate(int id) {
                 if (temp_input == "") {
                     break;
                 }
-                if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()){
+                if(regex_match(temp_input, input_regex)){
                     user->setBalance(user->getBalance() + stod(temp_input));
                     tips = "";
                 }
@@ -205,7 +207,7 @@ void selectedUsertoUpdate(int id) {
                 if (temp_input == "") {
                     break;
                 }
-                if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()){
+                if((regex_match(temp_input, input_regex))){
                     user->setBalance(user->getBalance() - stod(temp_input));
                     tips = "";
                 }
@@ -221,7 +223,7 @@ void selectedUsertoUpdate(int id) {
                 if (temp_input == "") {
                     break;
                 }
-                if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+                if (regex_match(temp_input, input_regex)) {
                     user->setBalance(stod(temp_input));
                     tips = "";
                 }
@@ -249,7 +251,7 @@ void USER_DELETE() {
     if (temp_input == "!r") {
         RETURNTO_MENU();
     }
-    else if(find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+    else if(regex_match(temp_input, input_regex)) {
         sll.deleteNodeByKey(stoi(temp_input));
         db_connect.Delete(temp_input);
     }

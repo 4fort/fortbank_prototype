@@ -146,35 +146,6 @@ public:
         }
 
     }
-    // 3. Prepend Node - Attach a node at the start
-    /*void prependNode(Node* n) {
-        if (nodeExists(n->getId()) != NULL) {
-            cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
-        }
-        else {
-            n->next = head;
-            head = n;
-            cout << "Node Prepended" << endl;
-        }
-    }*/
-
-    // 4. Insert a Node after a particular node in the list
-    /*void insertNodeAfter(string temp_id, Node* n) {
-        Node* ptr = nodeExists(temp_id);
-        if (ptr == NULL) {
-            cout << "No node exists with key value: " << temp_id << endl;
-        }
-        else {
-            if (nodeExists(n->getId()) != NULL) {
-                cout << "Node Already exists with key value : " << n->getId() << ". Append another node with different Key value" << endl;
-            }
-            else {
-                n->next = ptr->next;
-                ptr->next = n;
-                cout << "Node Inserted" << endl;
-            }
-        }
-    }*/
 
     // 5. Delete node by unique key
     void deleteNodeByKey(int temp_id) {
@@ -209,7 +180,6 @@ public:
                 }
             }
         }
-        system("pause");
     }
     // 6th update node
     /*void updateNodeByKey(int temp_id, string temp_owner_name, string temp_email, int temp_card_pin, double temp_balance) {
@@ -274,22 +244,6 @@ public:
         }
 
     }
-
-    // 8th printing specific
-   /* Node* selectSpecific(int temp_id) {
-        if (head == NULL) {
-            cout << "No Nodes in Singly Linked List";
-        }
-        else {
-            Node* ptr = nodeExists(temp_id);
-            if (ptr != NULL) {
-                return ptr;
-            }
-            else {
-                return NULL;
-            }
-        }
-    }*/
 
     void printSpecific(int temp_id) {
         if (head == NULL) {

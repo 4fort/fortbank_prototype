@@ -2,6 +2,8 @@
 #include <sstream>
 #include <windows.h>
 #include <conio.h>
+#include <regex>
+#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 using namespace std;
@@ -44,29 +46,31 @@ int CLIENT_MAIN(Node* loggedin_user) {
 			cout << "[" << i << "] " << menu[i] << '\n';
 		}
 
-		int choice;
+		string choice;
 		cout << "select -> ";
 		cin >> choice;
-		switch (choice)
-		{
-		case 0:
-			system("cls");
-			main();
-			break;
-		case 1:
-			DEPOSIT();
-			break;
-		case 2:
-			WITHDRAW();
-			break;
-		case 3:
-			TRANSFER();
-			break;
-		case 4:
-			CHANGE_PIN();
-			break;
-		default:
-			break;
+		if (regex_match(choice, input_regex)) {
+			switch (stoi(choice))
+			{
+			case 0:
+				system("cls");
+				main();
+				break;
+			case 1:
+				DEPOSIT();
+				break;
+			case 2:
+				WITHDRAW();
+				break;
+			case 3:
+				TRANSFER();
+				break;
+			case 4:
+				CHANGE_PIN();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	return 0;
@@ -78,13 +82,13 @@ void DEPOSIT() {
 	string temp_input;
 	cout << "Deposit: ";
 	cin >> temp_input;
-	if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+	if (regex_match(temp_input, input_regex)) {
 		current_user->setBalance(current_user->getBalance() + stod(temp_input));
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);
 	}
 	else {
-		cout << "Invalid input!";
+		DEPOSIT();
 	}
 }
 
@@ -94,20 +98,18 @@ void WITHDRAW() {
 	string temp_input;
 	cout << "Withdraw: ";
 	cin >> temp_input;
-	if (stod(temp_input) != NULL) {
+	if (regex_match(temp_input, input_regex)) {
 		if (current_user->getBalance() > stod(temp_input)) {
-			if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
-				current_user->setBalance(current_user->getBalance() - stod(temp_input));
-				sll.updateNode(current_user);
-				db_connect.Update(current_user);
-			}
+			current_user->setBalance(current_user->getBalance() - stod(temp_input));
+			sll.updateNode(current_user);
+			db_connect.Update(current_user);
 		}
 		else {
 			cout << "Not enough Balance!";
 		}
 	}
 	else {
-		cout << "Invalid input!";
+		WITHDRAW();
 	}
 }
 
@@ -125,12 +127,12 @@ void TRANSFER() {
 		cin >> temp_input;
 		if (stod(temp_input) != NULL) {
 			if (current_user->getBalance() > stod(temp_input)) {
-				if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+				if (regex_match(temp_input, input_regex)) {
 					current_user->setBalance(current_user->getBalance() + stod(temp_input));
 					sll.updateNode(current_user);
 					db_connect.Update(current_user);
 				}
-				if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+				if (regex_match(temp_input, input_regex)) {
 					receiver->setBalance(receiver->getBalance() + stod(temp_input));
 					sll.updateNode(receiver);
 					db_connect.Update(receiver);
@@ -157,7 +159,7 @@ void CHANGE_PIN() {
 	cout << "Enter new pin: ";
 	cin >> temp_input;
 
-	if (find_if(temp_input.begin(), temp_input.end(), isdigit) != temp_input.end()) {
+	if (regex_match(temp_input, input_regex)) {
 		current_user->setCardPin(stoi(temp_input));
 		sll.updateNode(current_user);
 		db_connect.Update(current_user);

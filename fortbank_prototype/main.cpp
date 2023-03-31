@@ -1,4 +1,6 @@
 #include <iostream>
+#include <regex>
+#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 #include "custlib.h"
@@ -9,8 +11,11 @@ SQL_CONNECTOR db_connect;
 SinglyLinkedList sll;
 custlib cstmlib;
 
+regex input_regex("(?:\\d*\\.)?\\d+");
+
 extern int ADMIN_MAIN();
 extern int CLIENT_MAIN(Node* User);
+
 
 int main()
 {
@@ -36,7 +41,7 @@ int main()
             system("cls");
             ADMIN_MAIN();
         }
-        else if (find_if(userCard.begin(), userCard.end(), isdigit) != userCard.end() && find_if(userPin.begin(), userPin.end(), isdigit) != userPin.end()) {
+        else if (regex_match(userCard, input_regex) && regex_match(userPin, input_regex)) {
             if (sll.validate(stoi(userCard), stoi(userPin))) {
                 Node* User = new Node();
 
