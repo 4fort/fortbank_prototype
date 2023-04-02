@@ -1,7 +1,10 @@
 #pragma once
 #include <iostream>
 #include <iomanip>
+#include <regex>
 using namespace std;
+
+extern regex input_regex;
 
 class custlib {
 public:

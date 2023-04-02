@@ -139,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="custlib.h" />
-    <ClInclude Include="Regex.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="SQL_CONNECTOR.h" />
   </ItemGroup>

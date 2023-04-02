@@ -1,6 +1,5 @@
 #include <iostream>
 #include <regex>
-#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 #include "custlib.h"
@@ -8,7 +7,8 @@
 using namespace std;
 
 SQL_CONNECTOR db_connect;
-SinglyLinkedList sll;
+SinglyLinkedList userList;
+SinglyLinkedList historyList;
 custlib cstmlib;
 
 regex input_regex("(?:\\d*\\.)?\\d+");
@@ -16,10 +16,9 @@ regex input_regex("(?:\\d*\\.)?\\d+");
 extern int ADMIN_MAIN();
 extern int CLIENT_MAIN(Node* User);
 
-
 int main()
 {
-    if (sll.nodeExists(1) == NULL) {
+    if (userList.nodeExists(1) == NULL) {
         db_connect.connect();
     }
     while (true) {
@@ -42,15 +41,15 @@ int main()
             ADMIN_MAIN();
         }
         else if (regex_match(userCard, input_regex) && regex_match(userPin, input_regex)) {
-            if (sll.validate(stoi(userCard), stoi(userPin))) {
+            if (userList.validate(stoi(userCard), stoi(userPin))) {
                 Node* User = new Node();
 
-                User->setId(sll.validate(stoi(userCard), stoi(userPin))->getId());
-                User->setName(sll.validate(stoi(userCard), stoi(userPin))->getName());
-                User->setEmail(sll.validate(stoi(userCard), stoi(userPin))->getEmail());
-                User->setCardNum(sll.validate(stoi(userCard), stoi(userPin))->getCardNum());
-                User->setCardPin(sll.validate(stoi(userCard), stoi(userPin))->getCardPin());
-                User->setBalance(sll.validate(stoi(userCard), stoi(userPin))->getBalance());
+                User->setId(userList.validate(stoi(userCard), stoi(userPin))->getId());
+                User->setName(userList.validate(stoi(userCard), stoi(userPin))->getName());
+                User->setEmail(userList.validate(stoi(userCard), stoi(userPin))->getEmail());
+                User->setCardNum(userList.validate(stoi(userCard), stoi(userPin))->getCardNum());
+                User->setCardPin(userList.validate(stoi(userCard), stoi(userPin))->getCardPin());
+                User->setBalance(userList.validate(stoi(userCard), stoi(userPin))->getBalance());
 
                 CLIENT_MAIN(User);
             }

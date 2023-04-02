@@ -12,6 +12,16 @@ class Node {
     int card_num;
     int card_pin;
     double balance;
+
+    int owner_id;
+    string hist_type;
+    string date;
+    double amount;
+    double user_prev_amount;
+    double receiver_prev_amount;
+    bool is_receiver;
+    int card_sender;
+    int card_receiver;
 public:
     void setId(int x) {
         this->id = x;
@@ -48,6 +58,55 @@ public:
     }
     double getBalance() {
         return this->balance;
+    }
+
+    void setOwnerId_history(int x) {
+        this->owner_id = x;
+    }
+    int getOwnerId_history() {
+        return this->owner_id;
+    }
+    void setHistoryType_history(string x) {
+        this->hist_type = x;
+    }
+    string getHistoryType_history() {
+        return this->hist_type;
+    }
+    void setDate_history(string x) {
+        this->date = x;
+    }
+    string getDate_history() {
+        return this->date;
+    }
+    void setAmount_history(double x) {
+        this->amount = x;
+    }
+    double getAmount_history() {
+        return this->amount;
+    }
+    void setUserPrevAmount_history(double x) {
+        this->user_prev_amount = x;
+    }
+    double getUserPrevAmount_history() {
+        return this->user_prev_amount;
+    }
+    void setIsReceiver_history(bool x) {
+        this->is_receiver = x;
+    }
+    bool getIsReceiver_history() {
+        return this->is_receiver;
+    }
+    void setCardSender_history(int x) {
+        this->card_sender = x;
+    }
+    int getCardSender_history() {
+        return this->card_sender;
+    }
+    void setCardReceiver_history(int x) {
+        this->card_receiver = x;
+    }
+    int getCardReceiver_history() {
+        return this->card_receiver;
     }
 
     Node* next;
@@ -235,7 +294,7 @@ public:
                 cstmlib.printElement(temp->getEmail(), 30, ' ');
                 cstmlib.printElement(temp->getCardNum(), 20, ' ');
                 cstmlib.printElement(temp->getCardPin(), 20, ' ');
-                cout << "P ";
+                cout << "P";
                 cstmlib.printElement(temp->getBalance(), 0, ' ');
                 cout << '\n';
                 temp = temp->next;
@@ -253,7 +312,7 @@ public:
             Node* ptr = nodeExists(temp_id);
             if (ptr != NULL) {
                 cstmlib.printElement("", 120, '=');
-                cout << '\n';
+                cout << endl;
                 cstmlib.printElement("ID", 5, ' ');
                 cstmlib.printElement("Name", 30, ' ');
                 cstmlib.printElement("Email", 30, ' ');
@@ -266,11 +325,44 @@ public:
                 cstmlib.printElement(ptr->getEmail(), 30, ' ');
                 cstmlib.printElement(ptr->getCardNum(), 20, ' ');
                 cstmlib.printElement(ptr->getCardPin(), 20, ' ');
-                cout << "P ";
+                cout << "P";
                 cstmlib.printElement(ptr->getBalance(), 0, ' ');
-                cout << '\n';
+                cout << endl;
                 cstmlib.printElement("", 120, '=');
             }
+        }
+    }
+
+    void printSpecificHistory(Node* current_user) {
+        if (head == NULL) {
+            cout << "No Nodes in Singly Linked List" << endl;
+        }
+        else {
+            Node* temp = head;
+            cstmlib.printElement("", 120, '=');
+            cout << endl;
+            cstmlib.printElement("ID", 5, ' ');
+            cstmlib.printElement("Transaction Type", 20, ' ');
+            cstmlib.printElement("Date & Time", 25, ' ');
+            cstmlib.printElement("Amount", 15, ' ');
+            cstmlib.printElement("Prev. Amount", 20, ' ');
+            cstmlib.printElement("Sender Number", 15, ' ');
+            cstmlib.printElement("Receiver Number", 15, ' ');
+            cout << '\n';
+            while (temp != NULL) {
+                if (current_user->getCardNum() == temp->getCardSender_history() || current_user->getCardNum() == temp->getCardReceiver_history() || current_user->getId() == temp->getOwnerId_history()) {
+                    cstmlib.printElement(temp->getId(), 5, ' ');
+                    cstmlib.printElement(temp->getHistoryType_history(), 20, ' ');
+                    cstmlib.printElement(temp->getDate_history(), 25, ' ');
+                    cstmlib.printElement(temp->getAmount_history(), 15, ' ');
+                    cstmlib.printElement(temp->getPrevAmount_history(), 20, ' ');
+                    cstmlib.printElement(temp->getCardSender_history(), 15, ' ');
+                    cstmlib.printElement(temp->getCardReceiver_history(), 15, ' ');
+                    cout << endl;
+                }
+                temp = temp->next;
+            }
+            cstmlib.printElement("", 120, '=');
         }
     }
 };

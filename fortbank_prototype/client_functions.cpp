@@ -2,21 +2,22 @@
 #include <sstream>
 #include <windows.h>
 #include <conio.h>
-#include <regex>
-#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 using namespace std;
 
 Node* current_user = new Node();
 extern SQL_CONNECTOR db_connect;
-extern SinglyLinkedList sll;
+extern SinglyLinkedList userList;
+extern SinglyLinkedList historyList;
 
 extern int main();
 void DEPOSIT();
 void WITHDRAW();
 void TRANSFER();
 void CHANGE_PIN();
+void TRANSACTION_HISTORY();
+void transaction_handler(string type, double amount, double prev_amount, bool isReceiver);
 
 void coord(int x, int y) {
 	COORD c;
@@ -31,17 +32,17 @@ int CLIENT_MAIN(Node* loggedin_user) {
 
 		system("cls");
 
-		cout << char(201);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(187) << endl;
-		cout << char(186) << "                     " << char(186) << endl;
-		cout << char(186) << "                     " << char(186) << endl;
-		cout << char(186) << "      FORT BANK      " << char(186) << endl;
-		cout << char(186) << "                     " << char(186) << endl;
-		cout << char(186) << "                     " << char(186) << endl;
-		cout << char(200);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(188) << endl;
+		cout << "\t\t\t\t\t\t" << char(201);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(187) << endl;
+		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
+		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
+		cout << "\t\t\t\t\t\t" << char(186) << "      FORT BANK      " << char(186) << endl;
+		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
+		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
+		cout << "\t\t\t\t\t\t" << char(200);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(188) << endl;
 
-		sll.printSpecific(current_user->getId());
+		userList.printSpecific(current_user->getId());
 		
-		string menu[] = { "Logout", "Deposit", "Withdraw", "Transfer", "Change Pin" };
+		string menu[] = { "Logout", "Deposit", "Withdraw", "Transfer", "Change Pin", "Transaction History"};
 		for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
 			cout << "[" << i << "] " << menu[i] << '\n';
 		}
@@ -68,6 +69,8 @@ int CLIENT_MAIN(Node* loggedin_user) {
 			case 4:
 				CHANGE_PIN();
 				break;
+			case 5:
+				TRANSACTION_HISTORY();
 			default:
 				break;
 			}
@@ -83,9 +86,14 @@ void DEPOSIT() {
 	cout << "Deposit: ";
 	cin >> temp_input;
 	if (regex_match(temp_input, input_regex)) {
+		transaction_handler("deposit", stod(temp_input), current_user->getBalance(), NULL);
+
 		current_user->setBalance(current_user->getBalance() + stod(temp_input));
-		sll.updateNode(current_user);
+		userList.updateNode(current_user);
 		db_connect.Update(current_user);
+	}
+	else if (temp_input == "!r") {
+		return;
 	}
 	else {
 		DEPOSIT();
@@ -100,13 +108,18 @@ void WITHDRAW() {
 	cin >> temp_input;
 	if (regex_match(temp_input, input_regex)) {
 		if (current_user->getBalance() > stod(temp_input)) {
+			transaction_handler("withdraw", stod(temp_input), current_user->getBalance(), NULL);
+
 			current_user->setBalance(current_user->getBalance() - stod(temp_input));
-			sll.updateNode(current_user);
+			userList.updateNode(current_user);
 			db_connect.Update(current_user);
 		}
 		else {
 			cout << "Not enough Balance!";
 		}
+	}
+	else if (temp_input == "!r") {
+		return;
 	}
 	else {
 		WITHDRAW();
@@ -117,24 +130,26 @@ void TRANSFER() {
 	cout << current_user->getBalance() << endl;
 
 	string temp_input;
-	int receiver_card;
+	string receiver_card;
+	Node* receiver = NULL;
 
 	cout << "Receiver Card Number: ";
 	cin >> receiver_card;
-	Node* receiver = sll.nodeExistByCard(receiver_card);
-	if (receiver != NULL) {
+	if (regex_match(receiver_card, input_regex)) {
+		if(userList.nodeExistByCard(stoi(receiver_card))) receiver = userList.nodeExistByCard(stoi(receiver_card));
 		cout << "Transfer Amount: ";
 		cin >> temp_input;
-		if (stod(temp_input) != NULL) {
-			if (current_user->getBalance() > stod(temp_input)) {
+		if (receiver != NULL) {
+			if (current_user->getBalance() > stod(temp_input) && current_user->getCardNum() != receiver->getCardNum()) {
 				if (regex_match(temp_input, input_regex)) {
-					current_user->setBalance(current_user->getBalance() + stod(temp_input));
-					sll.updateNode(current_user);
+					transaction_handler("transfer", stod(temp_input), current_user->getBalance(), NULL);
+
+					current_user->setBalance(current_user->getBalance() - stod(temp_input));
+					userList.updateNode(current_user);
 					db_connect.Update(current_user);
-				}
-				if (regex_match(temp_input, input_regex)) {
+
 					receiver->setBalance(receiver->getBalance() + stod(temp_input));
-					sll.updateNode(receiver);
+					userList.updateNode(receiver);
 					db_connect.Update(receiver);
 				}
 			}
@@ -144,7 +159,11 @@ void TRANSFER() {
 		}
 		else {
 			cout << "Invalid input!";
+			return;
 		}
+	}
+	else if (temp_input == "!r") {
+		return;
 	}
 	else {
 		cout << "User does not exist!";
@@ -161,10 +180,49 @@ void CHANGE_PIN() {
 
 	if (regex_match(temp_input, input_regex)) {
 		current_user->setCardPin(stoi(temp_input));
-		sll.updateNode(current_user);
+		userList.updateNode(current_user);
 		db_connect.Update(current_user);
+	}
+	else if (temp_input == "!r") {
+		return;
 	}
 	else {
 		cout << "Invalid input!";
 	}
+}
+
+void TRANSACTION_HISTORY() {
+	system("cls");
+	historyList.printSpecificHistory(current_user);
+
+	cout << endl << "[ !r ] Return\nPrint ID: ";
+	string temp_input;
+	cin >> temp_input;
+	if (temp_input == "!r") {
+		return;
+	}
+	else if (regex_match(temp_input, input_regex)) {
+		// PRINT GIVEN ID
+	}
+	TRANSACTION_HISTORY();
+}
+
+void transaction_handler(string type, double amount, double user_prev_amount, double receiver, bool isReceiver) {
+	Node* temp_hist = new Node();
+	temp_hist->setOwnerId_history(current_user->getId());
+	temp_hist->setHistoryType_history(type);
+	temp_hist->setAmount_history(amount);
+	temp_hist->setUserPrevAmount_history(prev_amount);
+	temp_hist->setReceiverPrevAmount_history()
+	temp_hist->setIsReceiver_history(isReceiver);
+	if (isReceiver) {
+		temp_hist->setCardReceiver_history(current_user->getCardNum());
+	}
+	else {
+		temp_hist->setCardSender_history(current_user->getCardNum());
+	}
+	temp_hist->setCardReceiver_history(NULL);
+	temp_hist->setCardSender_history(NULL);
+
+	historyList.appendNode(temp_hist);
 }

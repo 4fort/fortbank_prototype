@@ -1,7 +1,5 @@
 #include <iostream>
 #include <mysql.h>
-#include <regex>
-#include "Regex.h"
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 #include "custlib.h"
@@ -9,7 +7,7 @@
 using namespace std;
 
 extern SQL_CONNECTOR db_connect;
-extern SinglyLinkedList sll;
+extern SinglyLinkedList userList;
 extern custlib cstmlib;
 
 extern int main();
@@ -26,7 +24,7 @@ int ADMIN_MAIN() {
         cout << " \x1b[1mADMIN PANEL\x1b[0m ";
         cstmlib.printElement("", 53, '#');
         cout << '\n';
-        sll.printList();
+        userList.printList();
 
         cout << "\n";
         string crud[] = { "LOGOUT", "ADD USER", "UPDATE USER", "DELETE USER"};
@@ -69,7 +67,7 @@ void USER_ADD() {
     string temp_input;
 
     //db_connect.connect();
-    sll.printList();
+    userList.printList();
     //db_connect.print("");
 
     cout << "Enter Name: ";
@@ -98,7 +96,7 @@ void USER_ADD() {
     sll_user->setBalance(stod(temp_input));
 
     int cardNum = cardNumGenerator();
-    while (sll.nodeExistByCard(cardNum) != NULL) {
+    while (userList.nodeExistByCard(cardNum) != NULL) {
         cardNum = cardNumGenerator();
     }
     sll_user->setCardNum(cardNum);
@@ -106,7 +104,7 @@ void USER_ADD() {
 
     db_connect.Insert(sll_user);
     cout << "test";
-    sll.appendNode(sll_user);
+    userList.appendNode(sll_user);
 }
 
 void USER_UPDATE() {
@@ -114,7 +112,7 @@ void USER_UPDATE() {
 
     system("cls");
     cout << "[ " << tips << " ]" << endl;
-    sll.printList();
+    userList.printList();
     cout << "Select ID: ";
     cin >> temp_input;
 
@@ -128,7 +126,7 @@ void USER_UPDATE() {
 }
 
 void selectedUsertoUpdate(int id) {
-    Node* user = sll.nodeExists(id);
+    Node* user = userList.nodeExists(id);
     string menu[] = { "Return", "Name", "Email", "Pin", "Add Balance", "Minus Balance", "Set Balance"};
     string temp_input, tips;
 
@@ -136,7 +134,7 @@ void selectedUsertoUpdate(int id) {
         while (true) {
             system("cls");
             cout << "[ " << tips << " ]" << endl;
-            sll.printSpecific(id);
+            userList.printSpecific(id);
             for (int i = 0; i < (sizeof(menu) / sizeof(menu[0])); i++) {
                 cout << "[" << i << "] " << menu[i] << '\n';
             }
@@ -235,14 +233,14 @@ void selectedUsertoUpdate(int id) {
                 USER_UPDATE();
             }
             db_connect.Update(user);
-            sll.updateNode(user);
+            userList.updateNode(user);
         }
     }
 }
 
 void USER_DELETE() {
     //db_connect.connect();
-    sll.printList();
+    userList.printList();
 
     string temp_input;
     cout << "Enter ID: ";
@@ -252,7 +250,7 @@ void USER_DELETE() {
         RETURNTO_MENU();
     }
     else if(regex_match(temp_input, input_regex)) {
-        sll.deleteNodeByKey(stoi(temp_input));
+        userList.deleteNodeByKey(stoi(temp_input));
         db_connect.Delete(temp_input);
     }
 }
