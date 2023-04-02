@@ -17,8 +17,7 @@ class Node {
     string hist_type;
     string date;
     double amount;
-    double user_prev_amount;
-    double receiver_prev_amount;
+    double prev_amount;
     bool is_receiver;
     int card_sender;
     int card_receiver;
@@ -84,11 +83,11 @@ public:
     double getAmount_history() {
         return this->amount;
     }
-    void setUserPrevAmount_history(double x) {
-        this->user_prev_amount = x;
+    void setPrevAmount_history(double x) {
+        this->prev_amount = x;
     }
-    double getUserPrevAmount_history() {
-        return this->user_prev_amount;
+    double getPrevAmount_history() {
+        return this->prev_amount;
     }
     void setIsReceiver_history(bool x) {
         this->is_receiver = x;
@@ -350,7 +349,7 @@ public:
             cstmlib.printElement("Receiver Number", 15, ' ');
             cout << '\n';
             while (temp != NULL) {
-                if (current_user->getCardNum() == temp->getCardSender_history() || current_user->getCardNum() == temp->getCardReceiver_history() || current_user->getId() == temp->getOwnerId_history()) {
+                if (current_user->getId() == temp->getOwnerId_history()) {
                     cstmlib.printElement(temp->getId(), 5, ' ');
                     cstmlib.printElement(temp->getHistoryType_history(), 20, ' ');
                     cstmlib.printElement(temp->getDate_history(), 25, ' ');

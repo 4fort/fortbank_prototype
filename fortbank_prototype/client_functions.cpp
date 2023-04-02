@@ -17,7 +17,7 @@ void WITHDRAW();
 void TRANSFER();
 void CHANGE_PIN();
 void TRANSACTION_HISTORY();
-void transaction_handler(string type, double amount, double prev_amount, bool isReceiver);
+void transaction_handler(int owner_id, string type, double amount, double prev_amount, bool isReceiver, int receiver_cardNum);
 
 void coord(int x, int y) {
 	COORD c;
@@ -86,7 +86,7 @@ void DEPOSIT() {
 	cout << "Deposit: ";
 	cin >> temp_input;
 	if (regex_match(temp_input, input_regex)) {
-		transaction_handler("deposit", stod(temp_input), current_user->getBalance(), NULL);
+		transaction_handler(current_user->getId(), "deposit", stod(temp_input), current_user->getBalance(), NULL, NULL);
 
 		current_user->setBalance(current_user->getBalance() + stod(temp_input));
 		userList.updateNode(current_user);
@@ -108,7 +108,7 @@ void WITHDRAW() {
 	cin >> temp_input;
 	if (regex_match(temp_input, input_regex)) {
 		if (current_user->getBalance() > stod(temp_input)) {
-			transaction_handler("withdraw", stod(temp_input), current_user->getBalance(), NULL);
+			transaction_handler(current_user->getId(), "withdraw", stod(temp_input), current_user->getBalance(), NULL, NULL);
 
 			current_user->setBalance(current_user->getBalance() - stod(temp_input));
 			userList.updateNode(current_user);
@@ -142,12 +142,12 @@ void TRANSFER() {
 		if (receiver != NULL) {
 			if (current_user->getBalance() > stod(temp_input) && current_user->getCardNum() != receiver->getCardNum()) {
 				if (regex_match(temp_input, input_regex)) {
-					transaction_handler("transfer", stod(temp_input), current_user->getBalance(), NULL);
-
+					transaction_handler(current_user->getId(), "transfer", stod(temp_input), current_user->getBalance(), false, receiver->getCardNum());
 					current_user->setBalance(current_user->getBalance() - stod(temp_input));
 					userList.updateNode(current_user);
 					db_connect.Update(current_user);
 
+					transaction_handler(receiver->getId(), "transfer", stod(temp_input), receiver->getBalance(), true, receiver->getCardNum());
 					receiver->setBalance(receiver->getBalance() + stod(temp_input));
 					userList.updateNode(receiver);
 					db_connect.Update(receiver);
@@ -207,22 +207,17 @@ void TRANSACTION_HISTORY() {
 	TRANSACTION_HISTORY();
 }
 
-void transaction_handler(string type, double amount, double user_prev_amount, double receiver, bool isReceiver) {
+void transaction_handler(int owner_id, string type, double amount, double prev_amount, bool isReceiver, int receiver_cardNum) {
 	Node* temp_hist = new Node();
-	temp_hist->setOwnerId_history(current_user->getId());
+	temp_hist->setOwnerId_history(owner_id);
 	temp_hist->setHistoryType_history(type);
 	temp_hist->setAmount_history(amount);
-	temp_hist->setUserPrevAmount_history(prev_amount);
-	temp_hist->setReceiverPrevAmount_history()
+	temp_hist->setPrevAmount_history(prev_amount);
 	temp_hist->setIsReceiver_history(isReceiver);
-	if (isReceiver) {
-		temp_hist->setCardReceiver_history(current_user->getCardNum());
-	}
-	else {
+	if (isReceiver != NULL) {
 		temp_hist->setCardSender_history(current_user->getCardNum());
+		temp_hist->setCardReceiver_history(receiver_cardNum);
 	}
-	temp_hist->setCardReceiver_history(NULL);
-	temp_hist->setCardSender_history(NULL);
 
 	historyList.appendNode(temp_hist);
 }
