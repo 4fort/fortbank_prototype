@@ -261,7 +261,7 @@ void RETURNTO_MENU() {
 }
 
 int cardNumGenerator() {
-    srand(time(0));
+    srand((unsigned int)time(NULL));
     char randomizer;
     string random_card = "456";
     for (int i = 0; i < 3; i++) {

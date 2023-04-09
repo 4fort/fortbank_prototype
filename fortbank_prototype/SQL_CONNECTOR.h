@@ -84,9 +84,6 @@ public :
             cout << "Query Failed: " << mysql_error(conn) << endl;
         }
     }
-    int getLastId() {
-        return mysql_insert_id(conn);
-    }
 	void Insert(Node* user) {
         connect();
         string q = "INSERT INTO Users (owner_name, email, card_num, card_pin, balance) VALUES ('" + user->getName() + "', '" + user->getEmail() + "', " + to_string(user->getCardNum()) + ", " + to_string(user->getCardPin()) + ", " + to_string(user->getBalance()) + ')';
@@ -104,6 +101,7 @@ public :
     }
     void InsertHistory(Node* history) {
         connect();
-        string q = "INSERT INTO Transac_History (owner_id, hist_type, hist_datetime, amount, prev_amount, is_receiver, card_sender, card_receiver) VALUES ( 1, 'transfer', NOW(), 50.5, 2000.75, NULL, 456123, 456629)";
+        string q = "INSERT INTO Transac_History (owner_id, hist_type, hist_datetime, amount, prev_amount, is_receiver, card_sender, card_receiver) VALUES ("+ to_string(history->getOwnerId_history()) + ", '"+ history->getHistoryType_history() + "', '"+ history->getDate_history() + "', " + to_string(history->getAmount_history()) + ", " + to_string(history->getPrevAmount_history()) + ", " + to_string(history->getIsReceiver_history()) + ", " + to_string(history->getCardSender_history()) + ", " + to_string(history->getCardReceiver_history()) + ")";
+        query(q);
     }
 };

@@ -2,6 +2,7 @@
 #include <sstream>
 #include <windows.h>
 #include <conio.h>
+#include <ctime>
 #include "SQL_CONNECTOR.h"
 #include "SinglyLinkedList.h"
 using namespace std;
@@ -32,13 +33,14 @@ int CLIENT_MAIN(Node* loggedin_user) {
 
 		system("cls");
 
-		cout << "\t\t\t\t\t\t" << char(201);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(187) << endl;
-		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
-		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
-		cout << "\t\t\t\t\t\t" << char(186) << "      FORT BANK      " << char(186) << endl;
-		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
-		cout << "\t\t\t\t\t\t" << char(186) << "                     " << char(186) << endl;
-		cout << "\t\t\t\t\t\t" << char(200);      for (int i = 0; i < 21; i++) { cout << char(205); }      cout << char(188) << endl;
+		cout << "\t\t\t\t\t" << char(201);      for (int i = 0; i < 33; i++) { cout << char(205); }      cout << char(187) << endl;
+		cout << "\t\t\t\t\t" << char(186) << "			FORTBANK " << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(186) << "							" << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(186) << "							" << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(186) << " " + to_string(current_user->getCardNum()) + " " << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(186) << " "+ current_user->getName() + "		 "+ to_string(current_user->getCardPin()) + " " << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(186) << "						    " << char(186) << endl;
+		cout << "\t\t\t\t\t" << char(200);      for (int i = 0; i < 33; i++) { cout << char(205); }      cout << char(188) << endl;
 
 		userList.printSpecific(current_user->getId());
 		
@@ -137,9 +139,9 @@ void TRANSFER() {
 	cin >> receiver_card;
 	if (regex_match(receiver_card, input_regex)) {
 		if(userList.nodeExistByCard(stoi(receiver_card))) receiver = userList.nodeExistByCard(stoi(receiver_card));
-		cout << "Transfer Amount: ";
-		cin >> temp_input;
 		if (receiver != NULL) {
+			cout << "Transfer Amount: ";
+			cin >> temp_input;
 			if (current_user->getBalance() > stod(temp_input) && current_user->getCardNum() != receiver->getCardNum()) {
 				if (regex_match(temp_input, input_regex)) {
 					transaction_handler(current_user->getId(), "transfer", stod(temp_input), current_user->getBalance(), false, receiver->getCardNum());
@@ -208,16 +210,27 @@ void TRANSACTION_HISTORY() {
 }
 
 void transaction_handler(int owner_id, string type, double amount, double prev_amount, bool isReceiver, int receiver_cardNum) {
+	time_t t = time(nullptr);
+
 	Node* temp_hist = new Node();
 	temp_hist->setOwnerId_history(owner_id);
 	temp_hist->setHistoryType_history(type);
+	struct tm timeinfo;
+	localtime_s(&timeinfo, &t);
+	char buffer[20];
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+	temp_hist->setDate_history(buffer);
 	temp_hist->setAmount_history(amount);
 	temp_hist->setPrevAmount_history(prev_amount);
 	temp_hist->setIsReceiver_history(isReceiver);
-	if (isReceiver != NULL) {
+	if (type == "transfer") {
 		temp_hist->setCardSender_history(current_user->getCardNum());
-		temp_hist->setCardReceiver_history(receiver_cardNum);
 	}
+	else {
+		temp_hist->setCardSender_history(NULL);
+	}
+	temp_hist->setCardReceiver_history(receiver_cardNum);
 
+	db_connect.InsertHistory(temp_hist);
 	historyList.appendNode(temp_hist);
 }
