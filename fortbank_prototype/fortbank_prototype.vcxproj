@@ -133,7 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fortbank_prototype.cpp" />
+    <ClCompile Include="admin_functions.cpp" />
+    <ClCompile Include="client_functions.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="custlib.h" />
+    <ClInclude Include="SinglyLinkedList.h" />
+    <ClInclude Include="SQL_CONNECTOR.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
